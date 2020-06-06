@@ -3,6 +3,12 @@ import {Row, Col, Form, FormGroup, Input, Label, Button} from 'reactstrap'
 
 import logo from '../assets/bookshelf.png'
 
+import {
+  BrowserRouter as Router,
+  Link
+} from "react-router-dom";
+
+
 class Login extends Component{
   constructor(props){
     super(props)
@@ -64,8 +70,12 @@ class Login extends Component{
                     <div>Forgot Password</div>
                   </div>
                   <div className='mt-2'>
-                    <Button color="primary">Login</Button>
-                    <Button outline color="secondary" className='ml-2'>Sign Up</Button>
+                    <Link to={'/home'}>
+                      <Button color="primary">Login</Button>
+                    </Link>
+                    <Link to={'/register'}>
+                      <Button outline color="secondary" className='ml-2'>Sign Up</Button>
+                    </Link>
                   </div>
                 </Form>
               </div>

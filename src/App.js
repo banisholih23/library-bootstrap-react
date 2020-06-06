@@ -10,6 +10,7 @@ import {
 import Login from './pages/Login'
 import Register from './pages/Register'
 import Details from './pages/Details' 
+import Home from './pages/Home'
 // import ListBook from './pages/ListBook'
 
 class App extends Component{
@@ -21,6 +22,7 @@ class App extends Component{
             <Route path='/login' exact component={Login} />
             <Route path='/register' exact component={Register} />
             <Route path='/details' exact component={Details} />
+            <Route path='/home' component={Home} />
             {/* <Route path='/list-book'  component={ListBook} /> */}
           </Switch>
         </BrowserRouter>

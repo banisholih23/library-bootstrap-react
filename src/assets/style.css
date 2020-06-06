@@ -13,22 +13,48 @@ html, body, #root{
   background-size: contain;
 }
 
-.rgister-overlay{
+.register-overlay{
   padding: 20px;
   background-color: rgba(0,0,0,0.5);
 }
 
 .full-cover img{
-  margin-top: 250px;
-  /* padding-right: 30px; */
+  margin-top: -230px;
+  /* padding-left: 10px */
 }
 
-.half-cover{
-  width: 100%;
+.half-cover {
+  height: 425px;
+  background-image: url(covernya.png);
 }
 .book-details {
   margin-top: -50px;
 }
+
+/* .sidebar{
+  width: 100px;
+  background-color: white;
+  box-shadow: 5px 5px 5px rgba(0,0,0,0.5);
+  height: 100%;
+  position: fixed;
+  z-index: 2;
+}
+
+.sidebar .profile{
+  margin-top: 50px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+} */
+
+
+
+/* .navbar .side-right{
+  margin-top: -50px;
+  padding-left: 100px;
+} */
 /* .book-details {
   margin-top: 50px;
   display: flex;
