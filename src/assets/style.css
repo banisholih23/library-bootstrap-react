@@ -20,7 +20,6 @@ html, body, #root{
 
 .full-cover img{
   margin-top: -230px;
-  /* padding-left: 10px */
 }
 
 .half-cover {
@@ -29,6 +28,10 @@ html, body, #root{
 }
 .book-details {
   margin-top: -50px;
+}
+
+.bg-cover {
+  background-size: cover;
 }
 
 /* .sidebar{

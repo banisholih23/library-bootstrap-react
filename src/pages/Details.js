@@ -1,28 +1,46 @@
 import React, {Component, useState} from 'react'
-import {Row, Col, Form, FormGroup, Input, Label, Button, Modal, ModalHeader, ModalBody, ModalFooter} from 'reactstrap'
+import {Row, Col, Form, FormGroup, Input, Label, Button, Modal, ModalHeader, ModalBody, ModalFooter, Table, Alert} from 'reactstrap'
 
 import {
   BrowserRouter as Router,
   Link
 } from "react-router-dom";
 
+import axios from 'axios'
+
 import FullCover from '../assets/covernyadilan.png'
 
 class Details extends Component{
-  // constructor(props){
-  //   super(props)
-  //   this.state = {
-  //     buttonLabel,
-  //     className
-  //   }
-  // }
+  state = {
+    visible: true,
+    modalIsOpen: false
+  }
+
+  toggleModal(){
+    this.setState({
+      modalIsOpen: ! this.state.modalIsOpen
+    })
+  }
+
+  constructor(props){
+    super(props)
+    this.state = {
+      data: []
+    }
+  }
+  async componentDidMount(){
+    const results = await axios.get('http://localhost:5000/books')
+    const {data} = results.data
+    this.setState({data})
+    console.log(data)
+  }
 
   render(){
     return(
       <>
         <div className="details">
           <div className="half-cover">
-            <div className='w-100 cover-content d-flex justify-content-between p-4'>
+            <div className='w-100 d-flex justify-content-between p-5'>
               <div className="back">
                 <Link to={'/home'}>
                   <Button className='text-black'>BACK</Button>
@@ -31,7 +49,34 @@ class Details extends Component{
               <div className='option-btn'>
                 <h3>
                   <Link>
-                    <Button className='text-black' color="primary">EDIT</Button>
+                    <Button className='text-black' color="primary" onClick={this.toggleModal.bind(this)}>EDIT</Button>
+                    <Modal isOpen={this.state.modalIsOpen}>
+                      <ModalHeader toggle={this.toggleModal.bind(this)}>Edit Book</ModalHeader>
+                      <ModalBody>
+                        <FormGroup>
+                          <Label className='w-100'>
+                            <h6 className="pl-1">URL Image</h6>
+                            <Input type='email' className="mt-2" placeholder="http://gambar.com/kopi.jpg" />
+                          </Label>
+                        </FormGroup>
+                        <FormGroup>
+                          <Label className='w-100'>
+                            <h6 className="pl-1">Title</h6>
+                            <Input type='email' className="mt-2" placeholder="Filosfi Kopi" />
+                          </Label>
+                        </FormGroup>
+                        <FormGroup>
+                          <Label className='w-100 h-100'>
+                            <h6 className="pl-1">Description</h6>
+                            <Input type='email' className="mt-2" placeholder="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin ac diam eget est rutrum ultrices. Donec laoreet enim a massa dapibus, cursus egestas dui pulvinar. Proin sit amet accumsan lectus." />
+                          </Label>
+                        </FormGroup>
+                      </ModalBody>
+                      <ModalFooter>
+                        <Button color="primary">Submit</Button>
+                        <Button color="secondary" onClick={this.toggleModal.bind(this)}>Cancel</Button>
+                      </ModalFooter>
+                    </Modal>
                   </Link> 
                   <Link>
                     <Button className='text-black ml-2' outline color="secondary">DELETE</Button>
