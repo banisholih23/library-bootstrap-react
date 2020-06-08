@@ -12,6 +12,8 @@ import Register from './pages/Register'
 import Details from './pages/Details' 
 import Home from './pages/Home'
 import DetailsTry from './pages/DetailsTry'
+import LoginAdmin from './pages/LoginAdmin'
+import Transactions from './pages/Transactions'
 // import ListBook from './pages/ListBook'
 
 class App extends Component{
@@ -38,16 +40,11 @@ class App extends Component{
             <Route path='/details' exact component={Details} />
             <Route path='/home' component={Home} />
             <Route path='/detailstry/:id' exact component={DetailsTry} />
+            <Route path='/adminlogin' exact component={LoginAdmin} />
+            <Route path='/transactions' exact component={Transactions} />
             {/* <Route path='/list-book'  component={ListBook} /> */}
           </Switch>
         </BrowserRouter>
-        {this.state.data.map((lis_book, index) => (
-          <BrowserRouter>
-            <Switch>
-              <Route path={'/details/'+lis_book.id} />
-            </Switch>
-          </BrowserRouter>
-        ))}
       </>
     )
   }

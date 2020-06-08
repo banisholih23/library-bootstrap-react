@@ -7,11 +7,14 @@ import {
   Button,
   FormText,
   FormGroup,
+  Form,
   Label,
   Input,
   Modal, ModalHeader, ModalBody, ModalFooter,
-  Card, CardImg, CardBody
+  Card, CardImg, CardBody, CardDeck
 } from 'reactstrap'
+
+import { Carousel, Jumbotron } from 'react-bootstrap'
 
 import axios from 'axios'
 
@@ -22,7 +25,7 @@ import {
 
 import qs from 'querystring'
 
-import logo from '../assets/bookshelf.png'
+import logo from '../assets/booklogo.png'
 import profile from '../assets/myprofile.png'
 
 class Home extends Component {
@@ -55,7 +58,7 @@ class Home extends Component {
     this.state = {
       data: [],
       pageInfo: {},
-      isLoading: false
+      isLoading: false,
     }
   }
 
@@ -67,12 +70,6 @@ class Home extends Component {
     // const url = 'http://localhost:5000/books'
     const results = await axios.get(url)
     const { data } = results.data
-    // const pageInfo = {
-    //   page: results.data.page,
-    //   perPage: results.data.perPage,
-    //   totalData: results.data.totalData,
-    //   totalPage: results.data.totalPage,
-    // }
     const pageInfo = results.data.pageInfo
     this.setState({ data, pageInfo, isLoading: false })
     if (params) {
@@ -124,12 +121,6 @@ class Home extends Component {
                       It's a bit lighter and easily wraps to a new line.
                         </FormText>
                   </FormGroup>
-                  {/* <FormGroup>
-                        <Label className='w-100'>
-                          <h6 className="pl-1">URL Image</h6>
-                          <Input type='text' name="image" onChange={this.handlerChange} className="mt-2" placeholder="http://gambar.com/kopi.jpg" />
-                        </Label>
-                      </FormGroup> */}
                   <FormGroup>
                     <Label className='w-100'>
                       <h6 className="pl-1">Title</h6>
@@ -161,8 +152,7 @@ class Home extends Component {
                   </Label>
                 </FormGroup>
                 <div className="d-flex w-100 justify-content-end pl-5">
-                  <img className="pl-5" src={logo} alt="logo" />
-                  <h4 className="mt-3 ml-2">Library</h4>
+                  <img className="pl-5 mr-3" src={logo} alt="logo" />
                 </div>
               </Navbar>
             </div>
@@ -175,10 +165,29 @@ class Home extends Component {
                 }
                 {!this.state.isLoading && (
                   <div className="container">
+                    <Col>
+                      <Jumbotron>
+                        <Carousel>
+                          {this.state.data.map((lis_book, index) => (
+                            <Carousel.Item>
+                              <img style={{ height: '200px' }}
+                                className="d-block"
+                                src={lis_book.image}
+                                alt="cover"
+                              />
+                              <Carousel.Caption>
+                                <h3 className="text-dark">{lis_book.book_title}</h3>
+                                <p>Nulla vitae elit libero, a pharetra augue mollis interdum.</p>
+                              </Carousel.Caption>
+                            </Carousel.Item>
+                          ))}
+                        </Carousel>
+                      </Jumbotron>
+                    </Col>
                     <Row className='w-100 list-book'>
                       <Col className='list-book-content'>
                         <h4 className="pl-3">List All Books</h4>
-                        <Row xs='3' className='w-100 mb-5 card-deck'>
+                        <Row xs='4' className='w-100 mb-5 card-deck'>
                           {this.state.data.map((lis_book, index) => (
                             <Link className="text-decoration-none" to={{
                               pathname: `/detailstry/${lis_book.id}`,
@@ -191,15 +200,17 @@ class Home extends Component {
                                 cover: `${lis_book.image}`
                               }
                             }}>
-                              <Col>
-                                <Card role='button' className="mt-5 b-shadow">
-                                  <CardImg className='img-fluid' src={lis_book.image} alt="Card image cap" />
-                                  <CardBody>
-                                    <div className='text-dark h5'>{lis_book.book_title}</div>
-                                    <div className='text-muted'>{lis_book.book_status}</div>
-                                    <div className='text-dark'>{lis_book.book_author}</div>
-                                  </CardBody>
-                                </Card>
+                              <Col className="ml-3">
+                                <CardDeck>
+                                  <Card role='button' className="mt-5 b-shadow">
+                                    <CardImg className='img-fluid' src={lis_book.image} alt="Card image cap" />
+                                    <CardBody>
+                                      <div className='text-dark h5'>{lis_book.book_title}</div>
+                                      <div className='text-muted'>{lis_book.book_status}</div>
+                                      <div className='text-dark'>{lis_book.book_author}</div>
+                                    </CardBody>
+                                  </Card>
+                                </CardDeck>
                               </Col>
                             </Link>
                           ))}

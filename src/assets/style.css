@@ -34,6 +34,12 @@ html, body, #root{
   background-size: cover;
 }
 
+.slider-cover {
+  background-size: cover;
+}
+
+
+
 /* .sidebar{
   width: 100px;
   background-color: white;
