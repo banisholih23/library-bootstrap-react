@@ -14,7 +14,10 @@ import {
   Card, CardImg, CardBody, CardDeck
 } from 'reactstrap'
 
-import { Carousel, Jumbotron } from 'react-bootstrap'
+import TopNavbar from './Navbar'
+import Sidebar from './Sidebar'
+
+import { Carousel, Jumbotron, Dropdown } from 'react-bootstrap'
 
 import axios from 'axios'
 
@@ -96,131 +99,85 @@ class Home extends Component {
   render() {
     const params = qs.parse(this.props.location.search.slice(1))
     params.page = params.page || 1
+    params.sort = 0
     return (
       <>
-        <Row className="h-100 no-gutters">
-          <Col md={2} className="sidebar shadow p-3 mb-5 bg-white rounded">
-            <div className="profile">
-              <div className="d-flex flex-column justify-content-beetween pt-2">
-                <img className="profile-img" src={profile} alt="profile-image" />
-                <h4 className="d-flex align-items-center pl-4 pt-2">Bani Sholih</h4>
-              </div>
-            </div>
-            <Navbar className="pr-5 mr-3 flex-column justify-content-beetween mt-4" light expand="md">
-              <NavbarBrand href="/home">Explore</NavbarBrand>
-              <NavbarBrand href="/home">History</NavbarBrand>
-              <Button className='text-black' onClick={this.toggleModal.bind(this)}>Add Book</Button>
-              <Modal isOpen={this.state.modalIsOpen}>
-                <ModalHeader toggle={this.toggleModal.bind(this)}>Add Book</ModalHeader>
-                <ModalBody>
-                  <FormGroup>
-                    <Label for="exampleFile">File</Label>
-                    <Input type="file" name="image" onChange={this.handlerChange} />
-                    <FormText color="muted">
-                      This is some placeholder block-level help text for the above input.
-                      It's a bit lighter and easily wraps to a new line.
-                        </FormText>
-                  </FormGroup>
-                  <FormGroup>
-                    <Label className='w-100'>
-                      <h6 className="pl-1">Title</h6>
-                      <Input type='text' name="book_title" onChange={this.handlerChange} className="mt-2" placeholder="Filosfi Kopi" />
-                    </Label>
-                  </FormGroup>
-                  <FormGroup>
-                    <Label className='w-100 h-100'>
-                      <h6 className="pl-1">Description</h6>
-                      <Input type='text' name="book_desc" onChange={this.handlerChange} className="mt-2" placeholder="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin ac diam eget est rutrum ultrices. Donec laoreet enim a massa dapibus, cursus egestas dui pulvinar. Proin sit amet accumsan lectus." />
-                    </Label>
-                  </FormGroup>
-                </ModalBody>
-                <ModalFooter>
-                  <Button type="text" name="image" color="primary" onSubmit={this.handlerSubmit}>Submit</Button>
-                  <Button color="secondary" onClick={this.toggleModal.bind(this)}>Cancel</Button>
-                </ModalFooter>
-              </Modal>
-            </Navbar>
-          </Col>
-          <Col md={10} className="content">
-            <div className="navbar shadow p-3 mb-5 bg-white rounded ml-3">
-              <Navbar className="w-100" color="light" light expand="md">
-                <NavbarBrand href="/home">All Category</NavbarBrand>
-                <NavbarBrand href="/home" className="ml-3">All Time</NavbarBrand>
-                <FormGroup>
-                  <Label className="w-100 mt-4 ml-5">
-                    <Input className="ml-5 w-100" type="search" placeholder="search book"></Input>
-                  </Label>
-                </FormGroup>
-                <div className="d-flex w-100 justify-content-end pl-5">
-                  <img className="pl-5 mr-3" src={logo} alt="logo" />
+        <Row className="w-100 h-100">
+          {this.state.isLoading &&
+            <div className='d-flex justify-content-center align-items-center'>
+              Loading...
+                  </div>
+          }
+          {!this.state.isLoading && (
+            <div className="d-flex flex-row w-100 ml-3">
+              <Sidebar className="ml-3" />
+              <div className="w-100 h-100 d-flex flex-column">
+                <div className="top-navbar sticky-top">
+                  <TopNavbar className="w-100" search={(query) => this.fetchData(query)} />
                 </div>
-              </Navbar>
-            </div>
-            <Row>
-              <Col md={12}>
-                {this.state.isLoading &&
-                  <div className='d-flex justify-content-center align-items-center'>
-                    Loading...
-                  </div>
-                }
-                {!this.state.isLoading && (
-                  <div className="container">
-                    <Col>
-                      <Jumbotron>
-                        <Carousel>
-                          {this.state.data.map((lis_book, index) => (
-                            <Carousel.Item>
-                              <img style={{ height: '200px' }}
-                                className="d-block"
-                                src={lis_book.image}
-                                alt="cover"
-                              />
-                              <Carousel.Caption>
-                                <h3 className="text-dark">{lis_book.book_title}</h3>
-                                <p>Nulla vitae elit libero, a pharetra augue mollis interdum.</p>
-                              </Carousel.Caption>
-                            </Carousel.Item>
-                          ))}
-                        </Carousel>
-                      </Jumbotron>
-                    </Col>
-                    <Row className='w-100 list-book'>
-                      <Col className='list-book-content'>
-                        <h4 className="pl-3">List All Books</h4>
-                        <Row xs='4' className='w-100 mb-5 card-deck'>
-                          {this.state.data.map((lis_book, index) => (
-                            <Link className="text-decoration-none" to={{
-                              pathname: `/detailstry/${lis_book.id}`,
-                              state: {
-                                id: `${lis_book.id}`,
-                                book_title: `${lis_book.book_title}`,
-                                book_desc: `${lis_book.book_desc}`,
-                                book_status: `${lis_book.book_status}`,
-                                book_author: `${lis_book.book_author}`,
-                                cover: `${lis_book.image}`
-                              }
-                            }}>
-                              <Col className="ml-3">
-                                <CardDeck>
-                                  <Card role='button' className="mt-5 b-shadow">
-                                    <CardImg className='img-fluid' src={lis_book.image} alt="Card image cap" />
-                                    <CardBody>
-                                      <div className='text-dark h5'>{lis_book.book_title}</div>
-                                      <div className='text-muted'>{lis_book.book_status}</div>
-                                      <div className='text-dark'>{lis_book.book_author}</div>
-                                    </CardBody>
-                                  </Card>
-                                </CardDeck>
-                              </Col>
-                            </Link>
-                          ))}
-                        </Row>
-                      </Col>
+                <Col>
+                  <Jumbotron className="slider-bg mt-3">
+                    <Carousel>
+                      {this.state.data.map((lis_book, index) => (
+                        <Carousel.Item>
+                          <img style={{ height: '200px' }}
+                            className="d-block"
+                            src={lis_book.image}
+                            alt="cover"
+                          />
+                          <Carousel.Caption>
+                            <h3 className="text-light">{lis_book.book_title}</h3>
+                            <p>Nulla vitae elit libero, a pharetra augue mollis interdum.</p>
+                          </Carousel.Caption>
+                        </Carousel.Item>
+                      ))}
+                    </Carousel>
+                  </Jumbotron>
+                </Col>
+                <Row className='w-100 list-book'>
+                  <Col className='list-book-content'>
+                    {/* <h4 className="pl-3">List All Books</h4> */}
+                    <h4 className="pl-4 flex-row">List All Books
+                        <div className='d-flex justify-content-end'>
+                        {<Button className='btn-sm btn-sort' onClick={() => this.fetchData({ ...params, sort: 0 })}>Asc</Button>}&nbsp;|&nbsp;
+                          {<Button className='btn-sm btn-sort' onClick={() => this.fetchData({ ...params, sort: 1 })}>Desc</Button>}
+                      </div>
+                    </h4>
+                    <Row xs='4' className='w-100 mb-5 card-deck'>
+                      {this.state.data.map((lis_book, index) => (
+                        <Link className="text-decoration-none" to={{
+                          pathname: `/detailstry/${lis_book.id}`,
+                          state: {
+                            id: `${lis_book.id}`,
+                            book_title: `${lis_book.book_title}`,
+                            book_desc: `${lis_book.book_desc}`,
+                            book_status: `${lis_book.book_status}`,
+                            book_author: `${lis_book.book_author}`,
+                            cover: `${lis_book.image}`
+                          }
+                        }}>
+                          <Col className="ml-3">
+                            <CardDeck>
+                              <Card role='button' className="mt-3 b-shadow">
+                                <CardImg className='img-fluid' src={lis_book.image} alt="Card image cap" />
+                                <CardBody>
+                                  <div className='text-dark h5'>{lis_book.book_title}</div>
+                                  <div className='text-muted'>{lis_book.book_status}</div>
+                                  <div className='text-dark'>{lis_book.book_author}</div>
+                                </CardBody>
+                              </Card>
+                            </CardDeck>
+                          </Col>
+                        </Link>
+                      ))}
                     </Row>
-                  </div>
-                )}
+                    {this.state.data.length === 0 && (
+                      <h2 className="text-center">Data Not Available</h2>
+                    )}
+                  </Col>
+                </Row>
                 <Row className='mt-5 mb-5'>
-                  <Col md={12}>
+                  <Col>
                     <div className='d-flex flex-row justify-content-between'>
                       <div>
                         {<Button className="ml-5" onClick={() => this.fetchData({ ...params, page: parseInt(params.page) - 1 })}>Prev</Button>}
@@ -238,9 +195,9 @@ class Home extends Component {
                     </div>
                   </Col>
                 </Row>
-              </Col>
-            </Row>
-          </Col>
+              </div>
+            </div>
+          )}
         </Row>
       </>
     )

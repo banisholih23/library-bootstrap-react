@@ -8683,6 +8683,11 @@ react-axios@^2.0.3:
   resolved "https://registry.yarnpkg.com/react-axios/-/react-axios-2.0.3.tgz#9aeb75a2db07cebaf0ff710f666a2932ce024af5"
   integrity sha512-63kY2iupdRgbvPq9G8xmM0NWUnt2Q5YmpotMoLQsxKOzKXKZg2Lo6CzF/bcZvtmv3WnfjBU6Bg8nZQO28eIAZw==
 
+react-bootstrap-sweetalert@^5.1.11:
+  version "5.1.11"
+  resolved "https://registry.yarnpkg.com/react-bootstrap-sweetalert/-/react-bootstrap-sweetalert-5.1.11.tgz#721e028754e790dfaf1babed9a2a4ead85513425"
+  integrity sha512-cpBfdoZeoJE82ndokAhm+7JwrSLPKg+ZPgmB/3A+zf4pklP4eXHY2LWe2rpJm9w0UsSTeBD2Ve69C5ar0U88hA==
+
 react-bootstrap@^1.0.1:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/react-bootstrap/-/react-bootstrap-1.0.1.tgz#044b51f34a9db8e17dbfb321a71267a8d6ad11b4"
