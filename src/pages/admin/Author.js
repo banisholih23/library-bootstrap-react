@@ -146,9 +146,6 @@ class Author extends Component {
                           ))}
                         </tbody>
                       )}
-                      {this.state.data.length === 0 && (
-                        <h1>Data Not Available</h1>
-                      )}
                     </Table>
                     {/* <div className="d-flex justify-content-center">
                       <Pagination>
