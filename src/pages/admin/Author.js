@@ -1,26 +1,32 @@
 import React, { Component } from 'react';
 import TopNavbar from '../Navbar'
 import Sidebar from '../Sidebar'
+import swal from 'sweetalert2'
 import { Container, Row, Table, Card, Pagination } from 'react-bootstrap';
+import { Modal, ModalHeader, ModalBody, Input, ModalFooter, Button } from 'reactstrap'
 import axios from 'axios'
 import qs from 'querystring'
 
 import SweetAlert from 'react-bootstrap-sweetalert'
 
 import { AddAuthor } from '../../components/AddAuthor'
+import { EditAuthor } from '../../components/EditAuthor'
 
 class Author extends Component {
 
   constructor(props) {
     super(props)
     this.state = {
-      data: [],
       pageInfo: [],
       isLoading: false,
       addModalShow: false,
-      alert: null
+      alert: null,
+      data: []
     }
+  }
 
+  handlerChange = (e) => {
+    this.setState({ [e.target.name]: e.target.value })
   }
 
   fetchData = async (params) => {
@@ -96,6 +102,8 @@ class Author extends Component {
     params.page = params.page || 1
 
     let addModalClose = () => this.setState({ addModalShow: false })
+    let editModalClose = () => this.setState({editModalShow:false})
+    const {authorid, authorname, authordescription} = this.state
 
     return (
       <>
@@ -115,9 +123,17 @@ class Author extends Component {
                     <AddAuthor
                       show={this.state.addModalShow}
                       onHide={addModalClose}
-                      refres={this.fetchData}
+                      refreshdata={() => this.fetchData()}
                     />
 
+                    <EditAuthor
+                      show={this.state.editModalShow}
+                      onHide={editModalClose}
+                      refreshdata={() => this.fetchData()}
+                      authorid={authorid}
+                      authorname={authorname}
+                      authordescription={authordescription}
+                    />
 
                     <Table striped bordered hover>
                       <thead align="center">
@@ -136,9 +152,16 @@ class Author extends Component {
                               <td>{author.name}</td>
                               <td>{author.description}</td>
                               <td align="center">
-                                <button className="btn btn-warning ml-2">Edit</button>
+                                <Button onClick={() => {
+                                  this.setState({
+                                    editModalShow: true,
+                                    authorid: author.id,
+                                    authorname: author.name,
+                                    authordescription: author.description
+                                  })
+                                }} className="btn btn-warning ml-2">Edit</Button>
 
-                                <button onClick={() => { this.onDelete(author.id) }} className="btn btn-danger ml-2 mt-2">Delete</button>
+                                <Button onClick={() => { this.onDelete(author.id) }} className="btn btn-danger ml-2 mt-2">Delete</Button>
                                 {/*   <button onClick={() =>  { if (window.confirm('Are you sure you wish to delete this item?')) this.deleteAuthor(author.id)} } className="btn btn-danger ml-2">Delete</button> */}
                               </td>
                               {this.state.alert}
@@ -166,6 +189,19 @@ class Author extends Component {
             </div>
           </div>
         </Row>
+        <Modal isOpen={this.state.showEditModal}>
+          <ModalHeader className='h1'>Edit Admin</ModalHeader>
+          <ModalBody>
+            <h6>Name</h6>
+            <Input name='name' type='text' className='mb-2' onChange={this.handlerChange} value={this.state.name} />
+            <h6>Description</h6>
+            <Input name='description' type='text' className='mb-2' onChange={this.handlerChange} value={this.state.description} />
+          </ModalBody>
+          <ModalFooter>
+            <Button color='primary' onClick={this.handlerUpdate}>Edit</Button>
+            <Button color='secondary' onClick={this.toggleEditModal}>Cancel</Button>
+          </ModalFooter>
+        </Modal>
       </>
     )
   };

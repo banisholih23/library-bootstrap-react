@@ -7,10 +7,9 @@ import axios from 'axios'
 import qs from 'querystring'
 import SweetAlert from 'react-bootstrap-sweetalert'
 
-import { AddGenre } from '../../components/AddGenre'
-import { EditGenre } from '../../components/EditGenre'
+import { EditTransactions } from '../../components/EditTransactions'
 
-class Genre extends Component {
+class Transactions extends Component {
 
   constructor(props) {
     super(props)
@@ -31,7 +30,7 @@ class Genre extends Component {
     this.setState({ isLoading: true })
     const { REACT_APP_URL } = process.env
     const param = `${qs.stringify(params)}`
-    const url = `${REACT_APP_URL}books/genres?${param}`
+    const url = `${REACT_APP_URL}books/transactions?${param}`
     const results = await axios.get(url)
     const { data } = results.data
 
@@ -42,9 +41,9 @@ class Genre extends Component {
     }
   }
 
-  deleteGenre = async (id) => {
+  deleteTransactions = async (id) => {
     const { REACT_APP_URL } = process.env
-    const url = `${REACT_APP_URL}books/genres/${id}`
+    const url = `${REACT_APP_URL}books/transactions/${id}`
     await axios.delete(url)
     console.log(this.props)
 
@@ -67,7 +66,7 @@ class Genre extends Component {
         confirmBtnText="Yes, delete it!"
         confirmBtnBsStyle="danger"
         title="Are you sure?"
-        onConfirm={() => this.deleteGenre(id) && this.hideAlert()}
+        onConfirm={() => this.deleteTransactions(id) && this.hideAlert()}
         onCancel={() => this.hideAlert()}
         focusCancelBtn
       >
@@ -99,7 +98,7 @@ class Genre extends Component {
     params.page = params.page || 1
     let addModalClose = () => this.setState({ addModalShow: false })
     let editModalClose = () => this.setState({editModalShow:false})
-    const {genreid, genrename, genrecreated_at, genreupdated_at} = this.state
+    const {transactionsid, book_id, user_id, status_id } = this.state
     return (
       <>
         <Row className="no-gutters w-100 h-100">
@@ -115,52 +114,48 @@ class Genre extends Component {
                   <Card.Body>
                   <button onClick={() => this.setState({ addModalShow: true })} className="btn btn-success mb-2">Add</button>
 
-                  <AddGenre
-                    show={this.state.addModalShow}
-                    onHide={addModalClose}
-                    refreshdata={() => this.fetchData()}
-                  />
-
-                  <EditGenre
+                  <EditTransactions
                     show={this.state.editModalShow}
                     onHide={editModalClose}
                     refreshdata={() => this.fetchData()}
-                    genreid={genreid}
-                    genrename={genrename}
-                    genrecreated_at={genrecreated_at}
-                    genreupdated_at={genreupdated_at}
+                    transactionsid={transactionsid}
+                    book_id={book_id}
+                    user_id={user_id}
+                    status_id={status_id}
                   />
 
                     <Table striped bordered hover>
                       <thead align="center">
                         <tr>
-                          <th>No</th>
-                          <th>Name Genre</th>
-                          <th>Created-at</th>
-                          <th>Updated-at</th>
-                          <th>Action</th>
+                          <th>Id</th>
+                          <th>Title</th>
+                          <th>Author</th>
+                          <th>OrderBy</th>
+                          <th>Status</th>
+                          <th>Actions</th>
                         </tr>
                       </thead>
                       {this.state.data.length !== 0 && (
                         <tbody align="center">
-                          {this.state.data.map((genre, index) => (
-                            <tr key={genre.id.toString()}>
+                          {this.state.data.map((transactions, index) => (
+                            <tr key={transactions.id.toString()}>
                               <td>{index + 1}</td>
-                              <td>{genre.name}</td>
-                              <td>{genre.created_at}</td>
-                              <td>{genre.updated_at}</td>
+                              <td>{transactions.book_title}</td>
+                              <td>{transactions.book_author}</td>
+                              <td>{transactions.orderby}</td>
+                              <td>{transactions.status}</td>
                               <td align="center">
                                 <Button onClick={() => {
                                   this.setState({
                                     editModalShow: true,
-                                    genreid: genre.id,
-                                    genrename: genre.name,
-                                    genrecreated_at: genre.created_at,
-                                    genreupdated_at: genre.updated_at
+                                    transactionsid: transactions.id,
+                                    transactionsauthor: transactions.book_author,
+                                    transactionsorderby: transactions.orderby,
+                                    transactionsstatus: transactions.status
                                   })
                                 }} className="btn btn-warning ml-2">Edit</Button>
 
-                                <Button onClick={() => { this.onDelete(genre.id) }} className="btn btn-danger ml-2 mt-2">Delete</Button>
+                                <Button onClick={() => { this.onDelete(transactions.id) }} className="btn btn-danger ml-2 mt-2">Delete</Button>
                               </td>
                               {this.state.alert}
                             </tr>
@@ -181,4 +176,4 @@ class Genre extends Component {
     )
   };
 }
-export default Genre
+export default Transactions

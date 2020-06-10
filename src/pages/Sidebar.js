@@ -27,7 +27,7 @@ class Sidebar extends Component {
                             <Link className="nav-link text-decoration-none text-white" to="/transactions"> Transaction</Link>
                         </Nav.Item>
                         <Nav.Item>
-                            <Link className="nav-link text-decoration-none text-white" to="/user"> User</Link>
+                            <Link className="nav-link text-decoration-none text-white" to="/users"> User</Link>
                         </Nav.Item>
                         <Nav.Item>
                             <Link className="nav-link text-decoration-none text-white" to="/status"> Status</Link>
