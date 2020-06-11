@@ -30,18 +30,7 @@ class Sidebar extends Component {
                             <Link className="nav-link text-decoration-none text-white" to="/users"> User</Link>
                         </Nav.Item>
                         <Nav.Item>
-                            <Link className="nav-link text-decoration-none text-white" to="/status"> Status</Link>
-                        </Nav.Item>
-                        <Nav.Item>
-                            <Link className="nav-link text-decoration-none text-white" to="/logout"> Logout</Link>
-                        </Nav.Item>
-                        <Nav.Item>
-                            <Nav.Link eventKey="link-2">Link</Nav.Link>
-                        </Nav.Item>
-                        <Nav.Item>
-                            <Nav.Link eventKey="disabled" disabled>
-                                Disabled
-                            </Nav.Link>
+                            <Link className="nav-link text-decoration-none text-white" to="/login"> Logout</Link>
                         </Nav.Item>
                     </div>
                 </Navbar>

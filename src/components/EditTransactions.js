@@ -75,30 +75,30 @@ export class EditTransactions extends Component {
                     </Form.Text>
                 </Form.Group>
                 <Form.Group controlId="formBasicEmail">
-                    <Form.Label>Book Title</Form.Label>
+                    <Form.Label>ID Book</Form.Label>
                     <Form.Control 
                         name="book_id" 
                         onChange={this.handleChange} 
-                        type="text" placeholder="Book Title" 
+                        type="text" placeholder="Book ID" 
                         defaultValue={this.props.transactionsbook_id}/>
                     <Form.Text className="text-muted">
                     Please text mode
                     </Form.Text>
                 </Form.Group>
-                <Form.Group controlId="formBasicEmail">
+                {/* <Form.Group controlId="formBasicEmail">
                     <Form.Label>Author</Form.Label>
                     <Form.Control 
                         name="book_id" 
                         onChange={this.handleChange} 
                         type="text" placeholder="Author" 
                         defaultValue={this.props.transactionsbook_id}/>
-                </Form.Group>
+                </Form.Group> */}
                 <Form.Group controlId="formBasicEmail">
                     <Form.Label>Order By</Form.Label>
                     <Form.Control 
                         name="user_id" 
                         onChange={this.handleChange} 
-                        type="text" placeholder="Order By" 
+                        type="text" placeholder="User ID" 
                         defaultValue={this.props.transactionsuser_id}/>
                 </Form.Group>
                 <Form.Group controlId="formBasicEmail">
@@ -106,7 +106,7 @@ export class EditTransactions extends Component {
                     <Form.Control 
                         name="status_id" 
                         onChange={this.handleChange} 
-                        type="text" placeholder="Status" 
+                        type="text" placeholder="Status ID" 
                         defaultValue={this.props.transactionsstatus_id}/>
                 </Form.Group>
                 <Button onClick={this.handlePatch} variant="primary" type="submit">

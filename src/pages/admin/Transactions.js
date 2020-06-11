@@ -110,9 +110,8 @@ class Transactions extends Component {
               </div>
               <Container fluid className="mt-4">
                 <Card>
-                  <Card.Header>Genre</Card.Header>
+                  <Card.Header>Transactions</Card.Header>
                   <Card.Body>
-                  <button onClick={() => this.setState({ addModalShow: true })} className="btn btn-success mb-2">Add</button>
 
                   <EditTransactions
                     show={this.state.editModalShow}
