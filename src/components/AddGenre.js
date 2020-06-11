@@ -30,7 +30,9 @@ export class AddGenre extends Component {
     this.setState({ isLoading: true })
     const authorData = {
       name: this.state.name,
-      description: this.state.description
+      description: this.state.description,
+      created_at: this.state.created_at,
+      updated_at: this.state.updated_at
     }
     console.log(this.state)
     const url = `${REACT_APP_URL}books/genres`
