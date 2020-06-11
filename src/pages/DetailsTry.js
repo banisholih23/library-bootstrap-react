@@ -175,7 +175,8 @@ class Details extends Component {
           <Col md={12} className='h-100 bg-cover' style={{ backgroundImage: `url(${this.state.cover})` }}>
             <div className='h-100 darker'>
               <Navbar class='d-flex justify-content-between w-100 p-3'>
-                <Button className='text-black' onClick={() => this.props.history.goBack()}>Back</Button>
+                <Button className='text-white' color="secondary" onClick={this.home}>Back</Button>
+                {/* <Button className='text-black' onClick={() => this.props.history.goBack()}>Back</Button> */}
                 <div className='text-white d-flex'>
                   <Button className='text-black' color="primary" onClick={this.toggleEditModal}>Edit</Button>
                   <Button className='text-black ml-2' color="danger" onClick={this.toggleDeleteModal}>Delete</Button>
@@ -193,8 +194,8 @@ class Details extends Component {
             <div className="h6"> {this.state.book_author} </div>
             <div className=''> {this.state.book_desc} </div>
           </Col>
-          <Col md={4} className="borrow align-self-end d-flex justify-content-end">
-            <button type='button' className='btn btn-lg btn-borrow m-5' onClick={this.toggleBorrowModal}>Borrow</button>
+          <Col className="borrow align-self-end d-flex justify-content-end mt-1">
+            <Button type='button' className='btn btn-lg btn-borrow mr-5 text-white' color="warning" onClick={this.toggleBorrowModal}>Borrow</Button>
           </Col>
           {/* <Col className='d-flex flex-row justify-content-center ' sx='3'>
                         <Button className="btn btn-warning btn-lg text-white align-self-end b-shadow">Borrow</Button>

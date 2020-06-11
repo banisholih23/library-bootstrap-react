@@ -178,7 +178,7 @@ class Home extends Component {
                           />
                           <Carousel.Caption>
                             <h3 className="text-light">{lis_book.book_title}</h3>
-                            <p>Nulla vitae elit libero, a pharetra augue mollis interdum.</p>
+                            <p>{lis_book.book_desc}</p>
                           </Carousel.Caption>
                         </Carousel.Item>
                       ))}

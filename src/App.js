@@ -8,8 +8,7 @@ import {
 import axios from 'axios'
 
 import Login from './pages/Login'
-import Register from './pages/Register'
-import Details from './pages/Details' 
+import Register from './pages/Register' 
 import Home from './pages/Home'
 import DetailsTry from './pages/DetailsTry'
 import LoginAdmin from './pages/LoginAdmin'
@@ -42,7 +41,6 @@ class App extends Component{
           <Switch>
             <Route path='/login' exact component={Login} />
             <Route path='/register' exact component={Register} />
-            <Route path='/details' exact component={Details} />
             <Route path='/home' component={Home} />
             <Route path='/detailstry/:id' exact component={DetailsTry} />
             <Route path='/adminlogin' exact component={LoginAdmin} />
