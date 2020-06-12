@@ -21,6 +21,7 @@ class Login extends Component {
     this.onFormChange = (e, form) => {
       this.setState({ [form]: e.target.value })
     }
+    
     this.onLogin = (e) => {
       e.preventDefault()
       this.setState({ isLoading: true })

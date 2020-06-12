@@ -105,7 +105,7 @@ class Register extends Component {
                   </FormGroup>
                   <div className='mt-100'>
                     <Button onSubmit={this.handleRegist} color='primary'>Sign Up</Button>
-                    <Link to={'/login'}>
+                    <Link to={'/user'}>
                       <Button outline color='secondary' className='ml-2'>Login</Button>
                     </Link>
                   </div>
