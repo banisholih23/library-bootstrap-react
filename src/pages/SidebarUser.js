@@ -20,7 +20,7 @@ class Sidebar extends Component {
                 this.setState({isLoading: false}, ()=>{
                   localStorage.removeItem('token')
                     // this.props.check()
-                    history.push('/admin')
+                    history.push('/user')
                 })
               },1000)
             })
@@ -50,19 +50,7 @@ class Sidebar extends Component {
                     </div>
                     <div className="nav-side mt-5">
                         <Nav.Item>
-                            <Link className="nav-link text-decoration-none text-white" to="/home"> Dashboard</Link>
-                        </Nav.Item>
-                        <Nav.Item>
-                            <Link className="nav-link text-decoration-none text-white" to="/author"> Author</Link>
-                        </Nav.Item>
-                        <Nav.Item>
-                            <Link className="nav-link text-decoration-none text-white" to="/genres"> Genre</Link>
-                        </Nav.Item>
-                        <Nav.Item>
-                            <Link className="nav-link text-decoration-none text-white" to="/transactions"> Transaction</Link>
-                        </Nav.Item>
-                        <Nav.Item>
-                            <Link className="nav-link text-decoration-none text-white" to="/users"> User</Link>
+                            <Link className="nav-link text-decoration-none text-white" to="/"> Dashboard</Link>
                         </Nav.Item>
                         <Button className='text-black ml-2 mb-2' color="danger" onClick={this.onLogout}>Logout</Button>
                         {/* <Nav.Item>

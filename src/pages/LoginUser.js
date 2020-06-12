@@ -1,7 +1,7 @@
 import React, {Component} from 'react'
 import {Row, Col, Form, FormGroup, Input, Label, Button} from 'reactstrap'
 
-import logo from '../assets/booklogo2.png'
+import logo from '../assets/bookshelf.png'
 
 import {
   BrowserRouter as Router,
@@ -9,7 +9,7 @@ import {
 } from "react-router-dom";
 
 
-class Login extends Component{
+class LoginAdmin extends Component{
   constructor(props){
     super(props)
     this.state = {
@@ -91,4 +91,4 @@ class Login extends Component{
   }
 }
 
-export default Login
+export default LoginAdmin

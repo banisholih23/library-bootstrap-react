@@ -15,7 +15,7 @@ import {
 } from 'reactstrap'
 
 import TopNavbar from './Navbar'
-import Sidebar from './Sidebar'
+import SidebarUser from './SidebarUser'
 
 import { Carousel, Jumbotron, Dropdown } from 'react-bootstrap'
 
@@ -43,15 +43,6 @@ class Home extends Component {
     this.setState({ [e.target.name]: e.target.value })
   }
 
-  handlerSubmit = async (event) => {
-    event.preventDefault()
-
-    const data = new FormData(event.target)
-    data.set('image', data.get('image').toUpperCase())
-
-    await axios.post('http://localhost:5000/books')
-  }
-
   toggleModal() {
     this.setState({
       modalIsOpen: !this.state.modalIsOpen
@@ -60,29 +51,21 @@ class Home extends Component {
 
   constructor(props) {
     super(props)
-    this.checkToken = () => {
-      if(!localStorage.getItem('token')){
-        alert('You must login first')
-        props.history.push('/admin')
-      } 
-      // else {
-      //   props.history.push('/home')
-      // }
-    }
+    // this.checkToken = () => {
+    //   if(!localStorage.getItem('token')){
+    //     alert('You must login first')
+    //     props.history.push('/login')
+    //   } 
+    //   else {
+    //     props.history.push('/home')
+    //   }
+    // }
     this.state = {
       data: [],
       pageInfo: {},
       isLoading: false,
-      book_title: '',
-      book_desc: '',
-      image: '',
-      book_genre: '',
-      book_author: '',
-      book_status: '',
-      created_at: ''
     }
     this.toggleAddModal = this.toggleAddModal.bind(this)
-		this.addBook = this.addBook.bind(this)
   }
 
   toggleAddModal(){
@@ -90,40 +73,6 @@ class Home extends Component {
 			showAddModal: !this.state.showAddModal
 		})
   }
-  
-  async addBook (event) {
-		event.preventDefault()
-		const {REACT_APP_URL} = process.env
-		const dataSubmit = new FormData()
-		dataSubmit.append('image', this.state.image)
-		dataSubmit.set('book_title', this.state.book_title)
-		dataSubmit.set('book_desc', this.state.book_desc)
-		dataSubmit.set('book_genre', this.state.book_genre)
-    dataSubmit.set('book_author', this.state.book_author)
-    dataSubmit.set('book_status', this.state.book_status)
-    dataSubmit.set('created_at', this.state.created_at)
-
-		const url = `${REACT_APP_URL}books`
-		await axios.post(url, dataSubmit).then( (response) => {
-				console.log(response);
-				this.setState({showAddModal: false})
-				this.fetchData()
-				swal.fire({
-					icon: 'success',
-					title: 'Success',
-					text: 'Book has been Updated'
-				})
-			})
-			.catch(function (error) {
-				swal.fire({
-					icon: 'error',
-					title: 'haha!',
-					text: "Something's wrong"
-				})
-				console.log(error);
-			 })
-		this.props.history.push(`/home`)
-	}
 
   fetchData = async (params) => {
     this.setState({ isLoading: true })
@@ -141,7 +90,7 @@ class Home extends Component {
   }
 
   async componentDidMount() {
-    this.checkToken()
+    // this.checkToken()
     const results = await axios.get('http://localhost:5000/books')
     const { data } = results.data
     this.setState({ data })
@@ -171,7 +120,7 @@ class Home extends Component {
           }
           {!this.state.isLoading && (
             <div className="d-flex flex-row w-100 ml-3">
-              <Sidebar className="ml-3" />
+              <SidebarUser className="ml-3" />
               <div className="w-100 h-100 d-flex flex-column">
                 <div className="top-navbar sticky-top">
                   <TopNavbar className="w-100" search={(query) => this.fetchData(query)} />
@@ -263,31 +212,6 @@ class Home extends Component {
             </div>
           )}
         </Row>
-        <Modal isOpen={this.state.showAddModal}>
-					<ModalHeader className='h1'>Add Book</ModalHeader>
-						<Form>
-							<ModalBody>
-									<h6>Title</h6>
-									<Input type='text' name='book_title' className='mb-2 shadow-none' onChange={this.handlerChange}/>
-									<h6>Description</h6>
-									<Input type='text' name='book_desc' className='mb-3 shadow-none' onChange={this.handlerChange}/>
-									<h6>Author</h6>
-									<Input type='text' name='book_author' className='mb-3 shadow-none' onChange={this.handlerChange}/>
-									<h6>Genre</h6>
-									<Input type='text' name='book_genre' className='mb-3 shadow-none' onChange={this.handlerChange}/>
-                  <h6>Status</h6>
-									<Input type='text' name='book_status' className='mb-3 shadow-none' onChange={this.handlerChange}/>
-                  <h6>Created-at</h6>
-									<Input type='date' name='created_at' className='mb-3 shadow-none' onChange={this.handlerChange}/>
-									<h6>Cover Image</h6>
-									<Input type='file' name='image' className='mb-2' onChange={(e) => this.setState({image: e.target.files[0]})}/>
-							</ModalBody>
-							<ModalFooter>
-									<Button color="primary" onClick={this.addBook}>Add Book</Button>
-									<Button color="secondary" onClick={this.toggleAddModal}>Cancel</Button>
-							</ModalFooter>
-						</Form>
-				</Modal>
       </>
     )
   }
