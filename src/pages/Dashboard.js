@@ -122,7 +122,7 @@ class Home extends Component {
 				})
 				console.log(error);
 			 })
-		this.props.history.push(`/home`)
+		this.props.history.push(`/dashboard`)
 	}
 
   fetchData = async (params) => {

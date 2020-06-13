@@ -19,7 +19,8 @@ class Sidebar extends Component {
               setTimeout(()=>{
                 this.setState({isLoading: false}, ()=>{
                   localStorage.removeItem('token')
-                    // this.props.check()
+                  localStorage.removeItem('session_user')
+                //   this.props.check()
                     history.push('/user')
                 })
               },1000)
@@ -50,7 +51,7 @@ class Sidebar extends Component {
                     </div>
                     <div className="nav-side mt-5">
                         <Nav.Item>
-                            <Link className="nav-link text-decoration-none text-white" to="/"> Dashboard</Link>
+                            <Link className="nav-link text-decoration-none text-white" to="/home"> Dashboard</Link>
                         </Nav.Item>
                         <Button className='text-black ml-2 mb-2' color="danger" onClick={this.onLogout}>Logout</Button>
                         {/* <Nav.Item>

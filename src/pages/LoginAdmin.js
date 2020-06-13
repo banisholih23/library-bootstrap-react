@@ -31,7 +31,7 @@ class Login extends Component {
           this.setState({ isLoading: false }, () => {
             localStorage.setItem('token', 'true')
             this.props.check()
-            this.props.history.push('/home')
+            this.props.history.push('/dashboard')
           })
         }, 1000)
       } else {
@@ -40,7 +40,7 @@ class Login extends Component {
     }
     this.checkLogin = () => {
       if (localStorage.getItem('token')) {
-        this.props.history.push('/home')
+        this.props.history.push('/dashboard')
       }
     }
   }

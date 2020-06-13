@@ -50,7 +50,7 @@ class Sidebar extends Component {
                     </div>
                     <div className="nav-side mt-5">
                         <Nav.Item>
-                            <Link className="nav-link text-decoration-none text-white" to="/home"> Dashboard</Link>
+                            <Link className="nav-link text-decoration-none text-white" to="/dashboard"> Dashboard</Link>
                         </Nav.Item>
                         <Nav.Item>
                             <Link className="nav-link text-decoration-none text-white" to="/author"> Author</Link>

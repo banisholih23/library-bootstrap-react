@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { Row, Col, Form, FormGroup, Input, Label, Button } from 'reactstrap'
 
-import logo from '../assets/bookshelf.png'
+import logo from '../assets/booklogo2.png'
 
 import {
   BrowserRouter as Router,
@@ -57,7 +57,7 @@ class Register extends Component {
           text: "Something's wrong dude"
         })
       })
-    this.props.history.push('/')
+    this.props.history.push('/home')
     // this.fetchData()
     swal.fire({
       icon: 'success',
@@ -94,13 +94,13 @@ class Register extends Component {
                   <FormGroup>
                     <Label className='w-100'>
                       <div>Email</div>
-                      <Input name='email' bsSize='sm' placeholder='banisholih@gmail.com' onChange={this.handleChange} />
+                      <Input type="email" name='email' bsSize='sm' placeholder='banisholih@gmail.com' onChange={this.handleChange} />
                     </Label>
                   </FormGroup>
                   <FormGroup>
                     <Label className='w-100'>
                       <div>Password</div>
-                      <Input name='password' bsSize='sm' placeholder='************' onChange={this.handleChange} />
+                      <Input type="password" name='password' bsSize='sm' placeholder='************' onChange={this.handleChange} />
                     </Label>
                   </FormGroup>
                   <div className='mt-100'>

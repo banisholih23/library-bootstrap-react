@@ -2,26 +2,13 @@ import React, { Component } from 'react'
 import {
   Row,
   Col,
-  Navbar,
-  NavbarBrand,
   Button,
-  FormText,
-  FormGroup,
-  Form,
-  Label,
-  Input,
-  Modal, ModalHeader, ModalBody, ModalFooter,
   Card, CardImg, CardBody, CardDeck
 } from 'reactstrap'
 
-import TopNavbar from './Navbar'
-import SidebarUser from './SidebarUser'
-
-import { Carousel, Jumbotron, Dropdown } from 'react-bootstrap'
-
+import TopNavbar from './NavbarHome'
+import { Carousel, Jumbotron } from 'react-bootstrap'
 import axios from 'axios'
-
-import swal from 'sweetalert2'
 
 import {
   BrowserRouter as Router,
@@ -48,24 +35,6 @@ class Home extends Component {
 
   constructor(props) {
     super(props)
-    this.checkToken = () => {
-      if(!localStorage.getItem('token')){
-        alert('You must login first')
-        props.history.push('/user')
-      } 
-      else {
-        props.history.push('/home')
-      }
-    }
-    // this.checkToken = () => {
-    //   if(!localStorage.getItem('token')){
-    //     alert('You must login first')
-    //     props.history.push('/login')
-    //   } 
-    //   else {
-    //     props.history.push('/home')
-    //   }
-    // }
     this.state = {
       data: [],
       pageInfo: {},
@@ -96,8 +65,10 @@ class Home extends Component {
   }
 
   async componentDidMount() {
-    this.checkToken()
-    const results = await axios.get('http://localhost:5000/books')
+    // this.checkToken()
+    const { REACT_APP_URL } = process.env
+    const url = `${REACT_APP_URL}books`
+    const results = await axios.get(url)
     const { data } = results.data
     this.setState({ data })
     console.log(data)
@@ -126,17 +97,17 @@ class Home extends Component {
           }
           {!this.state.isLoading && (
             <div className="d-flex flex-row w-100 ml-3">
-              <SidebarUser className="ml-3" />
+              {/* <SidebarFirst className="ml-3" /> */}
               <div className="w-100 h-100 d-flex flex-column">
                 <div className="top-navbar sticky-top">
                   <TopNavbar className="w-100" search={(query) => this.fetchData(query)} />
                 </div>
                 <Col>
-                  <Jumbotron className="slider-bg mt-3">
+                  <Jumbotron className="slider-bg mt-4">
                     <Carousel>
                       {this.state.data.map((lis_book, index) => (
                         <Carousel.Item>
-                          <img style={{ height: '200px' }}
+                          <img style={{ height: '300px' }}
                             className="d-block"
                             src={lis_book.image}
                             alt="cover"
@@ -162,7 +133,7 @@ class Home extends Component {
                     <Row xs='4' className='w-100 mb-5 card-deck'>
                       {this.state.data.map((lis_book, index) => (
                         <Link className="text-decoration-none" to={{
-                          pathname: `/detailsuser/${lis_book.id}`,
+                          pathname: `/detailshome/${lis_book.id}`,
                           state: {
                             id: `${lis_book.id}`,
                             book_title: `${lis_book.book_title}`,

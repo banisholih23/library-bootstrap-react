@@ -1,12 +1,14 @@
 import React, { Component } from 'react'
 import { Row, Col, Form, FormGroup, Input, Label, Button, Modal, ModalBody, ModalHeader, ModalFooter } from 'reactstrap'
 
-import logo from '../assets/bookshelf.png'
+import logo from '../assets/booklogo2.png'
 
 import {
   BrowserRouter as Router,
   Link
 } from "react-router-dom";
+
+import AuthModel from '../models/auth'
 
 import Swal from 'sweetalert2'
 import axios from 'axios'
@@ -15,56 +17,63 @@ const { REACT_APP_URL } = process.env
 class LoginAdmin extends Component {
   constructor(props) {
     super(props)
+
+    if (localStorage.getItem('token')) {
+      props.history.push('/home')
+    }
+
     this.state = {
       email: '',
       password: '',
-      showModal: false,
-      showNotMatch: false,
-      isLoading: false
+      cpassword: '',
+      isLoading: false,
+      success: false
     }
     this.onFormChange = (e, form) => {
       this.setState({ [form]: e.target.value })
+  }
+
+  this.onLogin = (e) => {
+    e.preventDefault()
+    this.setState({ isLoading: true })
+    const userData = {
+      // username: this.state.username,
+      email: this.state.email,
+      password: this.state.password
     }
-
-    this.handleLogin = async (e) => {
-      e.preventDefault()
-      this.setState({ isLoading: true })
-      const userData = {
-        email: this.state.email,
-        password: this.state.password
-      }
-
-      // const { password, email } = this.state
-
-      // if (email.length < 1 || password.length < 1) {
-      //   Swal.fire(
-      //     'Register Failed',
-      //     'All field must be filled',
-      //     'error'
-      //   )
-      // }
-
-      console.log(this.state)
-      const url = `${REACT_APP_URL}books/auth/login`
-      console.log(url)
-      // const { email, password } = this.state 
-      const result = await axios.post(url, userData)
-      // console.log(response);
-      if (userData === undefined) {
-       this.setState({ showModal: true, isLoading: false })
+    console.log(this.state)
+    const url = `${REACT_APP_URL}books/auth/login`
+    console.log(url)
+    const {email , password} = this.state
+    axios.post(url, userData).then((response) => {
+      console.log(response);
+      if (email.length < 1 || password.length < 1) {
+        alert('all form must be filled')
       } else {
-        setTimeout(() => {
-          this.setState({ isLoading: false }, () => {
-            localStorage.setItem('token', 'true')
-            this.props.check()
-            this.props.history.push('/')
-          })
-        }, 1000)
+        localStorage.setItem('token', 'true')
+      this.props.check()
+      this.props.history.push('/home')  
       }
+    // this.fetchData()
+      Swal.fire({
+        icon: 'success',
+        title: 'Success',
+        text: "Good! You're Logged In"
+      })
+    })
+      .catch(function (error) {
+        console.log(error.response);
+        Swal.fire({
+          icon: 'error',
+          title: 'Oops!',
+          text: "Something's wrong dude"
+        })
+      })
+    
     }
     this.checkLogin = () => {
       if (localStorage.getItem('token')) {
-        this.props.history.push('/')
+        this.props.history.push('/home')
       }
     }
   }
@@ -72,16 +81,6 @@ class LoginAdmin extends Component {
   componentDidMount() {
     this.checkLogin()
   }
-  // login = (e) => {
-  //   e.preventDefault()
-  //   const data = {
-  //     userData: {
-  //       email: this.state.email,
-  //       password: this.state.password,
-  //     }
-  //   }
-  //   this.props.history.push('/list-book', data)
-  // }
 
   render() {
     return (
@@ -99,13 +98,13 @@ class LoginAdmin extends Component {
                 <img className='p-3' src={logo} alt='Logo' />
               </div>
               <div className='flex-grow-1 d-flex justify-content-center align-items-center'>
-                <Form onSubmit={e => this.handleLogin(e)}>
+                <Form onSubmit={e=>this.onLogin(e)}>
                   <h1>Login</h1>
                   <p>Welcome Back, Please Login to your account</p>
                   <FormGroup>
                     <Label className='w-100'>
                       <div>Email</div>
-                      <Input type='email' onChange={(e) => this.onFormChange(e, 'email')} placeholder="banisholih@gmail.com" />
+                      <Input type='text' onChange={(e) => this.onFormChange(e, 'email')} placeholder="name@gmail.com" />
                     </Label>
                   </FormGroup>
                   <FormGroup>
