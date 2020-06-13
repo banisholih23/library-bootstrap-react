@@ -22,16 +22,9 @@ class Details extends Component {
       id: props.match.params.id,
       book_title: props.location.state.book_title,
       book_desc: props.location.state.book_desc,
-      image: props.location.state.image,
-      book_genre: props.location.state.bokk_genre,
       book_status: props.location.state.book_status,
       book_author: props.location.state.book_author,
       cover: props.location.state.cover,
-      book_id: '',
-      status_id: '',
-      created_at: '',
-      user_id: '',
-      employee_id: 0,
       data: []
     }
   }

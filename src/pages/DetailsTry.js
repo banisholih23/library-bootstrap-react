@@ -31,6 +31,8 @@ class Details extends Component {
       created_at: '',
       user_id: '',
       employee_id: 0,
+      file: [],
+      file_: {},
       data: []
     }
     this.deleteBook = this.deleteBook.bind(this)
@@ -114,11 +116,26 @@ class Details extends Component {
     this.setState({ [e.target.name]: e.target.value })
   }
 
+  handleImage = (e) => {
+    this.setState({file: URL.createObjectURL(e.target.files[0]), file_: e.target.files[0]})
+  }
+
   updateBook = (event) => {
     event.preventDefault()
+
+    if (this.state.file_.size > 0) {
+      if(this.state.file_.size >= 1240000 || this.state.file_.type.split('/')[0] !== 'image') {
+        swal.fire('Failed', 'Max file size is 1240KB and file type just image', 'error')
+        return ;
+      }
+    }
+
     this.setState({ isLoading: true })
     const bookData = new FormData()
-    bookData.append('image', this.state.image)
+    if (this.state.file_.size > 0) {
+      bookData.append('image', this.state.file_)
+    }
+    // bookData.append('image', this.state.image)
     bookData.set('book_title', this.state.book_title)
     bookData.set('book_desc', this.state.book_desc)
     bookData.set('book_genre', this.state.book_genre)
@@ -220,7 +237,7 @@ class Details extends Component {
               <h6>Created-at</h6>
 							<Input type='date' name='created_at' className='mb-3 shadow-none' onChange={this.handlerChange}/>
               <h6>Image</h6>
-              <Input type='file' name='image' className='mb-2' onChange={(e) => this.setState({ image: e.target.files[0] })} />
+              <Input type="file" accept="image/*" name="file" id="file" onChange={this.handleImage} />
             </ModalBody>
             <ModalFooter>
               <Button color="primary" onClick={this.updateBook}>Edit Book</Button>

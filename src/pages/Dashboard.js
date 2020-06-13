@@ -79,7 +79,9 @@ class Home extends Component {
       book_genre: '',
       book_author: '',
       book_status: '',
-      created_at: ''
+      created_at: '',
+      file: [],
+      file_: {}
     }
     this.toggleAddModal = this.toggleAddModal.bind(this)
 		this.addBook = this.addBook.bind(this)
@@ -91,11 +93,26 @@ class Home extends Component {
 		})
   }
   
+  handleImage = (e) => {
+    this.setState({file: URL.createObjectURL(e.target.files[0]), file_: e.target.files[0]})
+  }
+
   async addBook (event) {
-		event.preventDefault()
+    event.preventDefault()
+    
+    if (this.state.file_.size > 0) {
+      if(this.state.file_.size >= 1240000 || this.state.file_.type.split('/')[0] !== 'image') {
+        swal.fire('Failed', 'Max file size is 1240KB and file type just image', 'error')
+        return ;
+      }
+    }
+
 		const {REACT_APP_URL} = process.env
-		const dataSubmit = new FormData()
-		dataSubmit.append('image', this.state.image)
+    const dataSubmit = new FormData()
+    if (this.state.file_.size > 0) {
+      dataSubmit.append('image', this.state.file_)
+    }
+		// dataSubmit.append('image', this.state.image)
 		dataSubmit.set('book_title', this.state.book_title)
 		dataSubmit.set('book_desc', this.state.book_desc)
 		dataSubmit.set('book_genre', this.state.book_genre)
@@ -280,7 +297,7 @@ class Home extends Component {
                   <h6>Created-at</h6>
 									<Input type='date' name='created_at' className='mb-3 shadow-none' onChange={this.handlerChange}/>
 									<h6>Cover Image</h6>
-									<Input type='file' name='image' className='mb-2' onChange={(e) => this.setState({image: e.target.files[0]})}/>
+									<Input type="file" accept="image/*" name="file" id="file" onChange={this.handleImage}/>
 							</ModalBody>
 							<ModalFooter>
 									<Button color="primary" onClick={this.addBook}>Add Book</Button>
