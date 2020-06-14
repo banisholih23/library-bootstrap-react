@@ -4,7 +4,7 @@ import axios from 'axios'
 import qs from 'querystring'
 import swal from 'sweetalert2'
 import {Col, Row, Button, Modal, ModalHeader, 
-  ModalBody, ModalFooter, Input, Form, Navbar} from 'reactstrap'
+  ModalBody, ModalFooter, Input, Form, Navbar, Badge} from 'reactstrap'
 import {
   BrowserRouter as Router,
   Link
@@ -22,9 +22,12 @@ class Details extends Component {
       id: props.match.params.id,
       book_title: props.location.state.book_title,
       book_desc: props.location.state.book_desc,
+      book_genre: props.location.state.book_genre,
       book_status: props.location.state.book_status,
       book_author: props.location.state.book_author,
       cover: props.location.state.cover,
+      genreName: '',
+      genreList: [],
       data: []
     }
   }
@@ -100,7 +103,30 @@ class Details extends Component {
       this.props.history.push(`?${param}`)
     }
   }
+
+  fetchDataGenre = async () => {
+		this.setState({isLoading: true})
+		const {REACT_APP_URL} = process.env
+		const url = `${REACT_APP_URL}books/genres`
+    const results = await axios.get(url)
+    console.log(results)
+    const {data} = results.data
+    return data
+  }
+
+  genreList = async () => {
+    this.setState({ isLoading: true })
+    const { REACT_APP_URL } = process.env
+    const url = `${REACT_APP_URL}books/genres`
+    const results = await axios.get(url)
+    this.setState({ genreList: results.data.data })
+    console.log(results)
+  }
+
   async componentDidMount() {
+    // await this.genreList()
+    // const data = await this.fetchDataGenre()
+    // this.setState({ genreName: data.name })
     const param = qs.parse(this.props.location.search.slice(1))
     await this.fetchData(param)
   }
@@ -121,7 +147,14 @@ class Details extends Component {
         </Row>
         <Row className="w100 no-gutters mb-5 ml-5 mt-3">
           <Col xs='9'>
-            <div className="badge badge-pill badge-warning text-white">Novel</div>
+            <div className="d-flex">
+              <div className="ml-2">
+                <h5><Badge color="warning text-white">Novel</Badge></h5>
+              </div>
+              <div className="ml-2">
+                <h5><Badge color="primary">{this.state.book_genre}</Badge></h5>
+              </div>
+            </div>
             <div className="h1"> {this.state.book_title} </div>
             <div className="text-success h5"> {this.state.book_status} </div>
             <div className="h6"> {this.state.book_author} </div>

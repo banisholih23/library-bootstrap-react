@@ -76,10 +76,13 @@ class Home extends Component {
       book_title: '',
       book_desc: '',
       image: '',
-      book_genre: '',
+      book_genre: 0,
       book_author: '',
+      authorList: [],
       book_status: '',
+      statusList: [],
       created_at: '',
+      genreList: [],
       file: [],
       file_: {}
     }
@@ -157,12 +160,20 @@ class Home extends Component {
     }
   }
 
+  genreList = async () => {
+		this.setState({isLoading: true})
+		const {REACT_APP_URL} = process.env
+    const url = `${REACT_APP_URL}books/genres`
+    console.log(url)
+		const results = await axios.get(url)
+    this.setState({genreList: results.data.data})
+    console.log(results)
+  }
+
   async componentDidMount() {
+    // this.checkToken()
     this.checkToken()
-    const results = await axios.get('http://localhost:5000/books')
-    const { data } = results.data
-    this.setState({ data })
-    console.log(data)
+    await this.genreList()
     const param = qs.parse(this.props.location.search.slice(1))
     await this.fetchData(param)
   }
@@ -197,7 +208,7 @@ class Home extends Component {
                   <Jumbotron className="slider-bg mt-3">
                     <Carousel>
                       {this.state.data.map((lis_book, index) => (
-                        <Carousel.Item>
+                        <Carousel.Item key={lis_book.id.toString()}>
                           <img style={{ height: '200px' }}
                             className="d-block"
                             src={lis_book.image}
@@ -226,12 +237,13 @@ class Home extends Component {
                     </h4>
                     <Row xs='4' className='w-100 mb-5 card-deck'>
                       {this.state.data.map((lis_book, index) => (
-                        <Link className="text-decoration-none" to={{
+                        <Link key={lis_book.id.toString()} className="text-decoration-none" to={{
                           pathname: `/detailstry/${lis_book.id}`,
                           state: {
                             id: `${lis_book.id}`,
                             book_title: `${lis_book.book_title}`,
                             book_desc: `${lis_book.book_desc}`,
+                            book_genre: `${lis_book.book_genre}`,
                             book_status: `${lis_book.book_status}`,
                             book_author: `${lis_book.book_author}`,
                             cover: `${lis_book.image}`
@@ -289,11 +301,18 @@ class Home extends Component {
 									<h6>Description</h6>
 									<Input type='text' name='book_desc' className='mb-3 shadow-none' onChange={this.handlerChange}/>
 									<h6>Author</h6>
-									<Input type='text' name='book_author' className='mb-3 shadow-none' onChange={this.handlerChange}/>
+									<Input type="text" name='book_author' className='mb-3 shadow-none' onChange={this.handlerChange} value={this.state.book_author} />
 									<h6>Genre</h6>
-									<Input type='text' name='book_genre' className='mb-3 shadow-none' onChange={this.handlerChange}/>
+                  <Input type='select' name='book_genre' className='mb-3 shadow-none' onChange={this.handlerChange} value={this.state.book_genre}>
+                    {this.state.genreList.map((book_genre, index) =>(
+                      <option key={book_genre.id.toString()} className="list-group-item bg-light" value={book_genre.name}>{book_genre.name}</option>
+                    ))}
+                  </Input>
                   <h6>Status</h6>
-									<Input type='text' name='book_status' className='mb-3 shadow-none' onChange={this.handlerChange}/>
+									<Input type='select' name='book_status' className='mb-3 shadow-none' onChange={this.handlerChange}>
+                    <option>Available</option>
+                    <option>Empty</option>
+                  </Input>
                   <h6>Created-at</h6>
 									<Input type='date' name='created_at' className='mb-3 shadow-none' onChange={this.handlerChange}/>
 									<h6>Cover Image</h6>

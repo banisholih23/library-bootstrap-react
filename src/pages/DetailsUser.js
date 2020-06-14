@@ -4,7 +4,7 @@ import axios from 'axios'
 import qs from 'querystring'
 import swal from 'sweetalert2'
 import {Col, Row, Button, Modal, ModalHeader, 
-  ModalBody, ModalFooter, Input, Form, Navbar} from 'reactstrap'
+  ModalBody, ModalFooter, Input, Form, Navbar, Badge} from 'reactstrap'
 import {
   BrowserRouter as Router,
   Link
@@ -22,7 +22,7 @@ class Details extends Component {
       book_title: props.location.state.book_title,
       book_desc: props.location.state.book_desc,
       image: props.location.state.image,
-      book_genre: props.location.state.bokk_genre,
+      book_genre: props.location.state.book_genre,
       book_status: props.location.state.book_status,
       book_author: props.location.state.book_author,
       cover: props.location.state.cover,
@@ -125,7 +125,14 @@ class Details extends Component {
         </Row>
         <Row className="w100 no-gutters mb-5 ml-5 mt-3">
           <Col xs='9'>
-            <div className="badge badge-pill badge-warning text-white">Novel</div>
+            <div className="d-flex">
+              <div className="ml-2">
+                <h5><Badge color="warning text-white">Novel</Badge></h5>
+              </div>
+              <div className="ml-2">
+                <h5><Badge color="primary">{this.state.book_genre}</Badge></h5>
+              </div>
+            </div>
             <div className="h1"> {this.state.book_title} </div>
             <div className="text-success h5"> {this.state.book_status} </div>
             <div className="h6"> {this.state.book_author} </div>

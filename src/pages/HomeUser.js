@@ -167,6 +167,7 @@ class Home extends Component {
                             id: `${lis_book.id}`,
                             book_title: `${lis_book.book_title}`,
                             book_desc: `${lis_book.book_desc}`,
+                            book_genre: `${lis_book.book_genre}`,
                             book_status: `${lis_book.book_status}`,
                             book_author: `${lis_book.book_author}`,
                             cover: `${lis_book.image}`
