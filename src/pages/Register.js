@@ -10,6 +10,7 @@ import {
 
 import swal from 'sweetalert2'
 import axios from 'axios'
+import Loading from '../components/Loadings'
 const { REACT_APP_URL } = process.env
 
 
@@ -19,7 +20,8 @@ class Register extends Component {
     this.state = {
       username: '',
       email: '',
-      password: ''
+      password: '',
+      isLoading: false,
     }
     this.handleRegist = this.handleRegist.bind(this)
     this.toggleRegistSuccess = this.toggleRegistSuccess.bind(this)
@@ -118,6 +120,7 @@ class Register extends Component {
             </div>
           </Col>
         </Row>
+        {this.state.isLoading && (<Loading/>)}
       </>
     )
   }

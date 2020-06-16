@@ -6,6 +6,7 @@ import { Modal, ModalHeader, ModalBody, Input, ModalFooter, Button } from 'react
 import axios from 'axios'
 import qs from 'querystring'
 import SweetAlert from 'react-bootstrap-sweetalert'
+import Loading from '../../components/Loadings'
 
 import { EditTransactions } from '../../components/EditTransactions'
 
@@ -103,7 +104,7 @@ class Transactions extends Component {
       <>
         <Row className="no-gutters w-100 h-100">
           <div className="d-flex flex-row w-100">
-            <Sidebar />
+            {/* <Sidebar /> */}
             <div className="w-100 d-flex flex-column">
               <div className="top-navbar sticky-top">
                 <TopNavbar />
@@ -120,7 +121,6 @@ class Transactions extends Component {
                     transactionsid={transactionsid}
                     book_id={book_id}
                     user_id={user_id}
-                    status_id={status_id}
                   />
 
                     <Table striped bordered hover>
@@ -142,7 +142,7 @@ class Transactions extends Component {
                               <td>{transactions.book_title}</td>
                               <td>{transactions.book_author}</td>
                               <td>{transactions.orderby}</td>
-                              <td>{transactions.status}</td>
+                              <td>{transactions.book_status}</td>
                               <td align="center">
                                 <Button onClick={() => {
                                   this.setState({
@@ -150,7 +150,7 @@ class Transactions extends Component {
                                     transactionsid: transactions.id,
                                     transactionsauthor: transactions.book_author,
                                     transactionsorderby: transactions.orderby,
-                                    transactionsstatus: transactions.status
+                                    transactionsstatus: transactions.book_status
                                   })
                                 }} className="btn btn-warning ml-2">Edit</Button>
 
@@ -171,6 +171,7 @@ class Transactions extends Component {
             </div>
           </div>
         </Row>
+        {this.state.isLoading && (<Loading/>)}
       </>
     )
   };

@@ -6,7 +6,9 @@ import logo from '../assets/booklogo2.png'
 import {
   BrowserRouter as Router,
   Link
-} from "react-router-dom";
+} from "react-router-dom"
+
+import Loading from '../components/Loadings'
 
 
 class Login extends Component {
@@ -126,6 +128,7 @@ class Login extends Component {
             <Button autoFocus onClick={() => this.setState({ showModal: false })} color='primary'>OK</Button>
           </ModalFooter>
         </Modal>
+        {this.state.isLoading && (<Loading/>)}
       </>
     )
   }

@@ -3,12 +3,13 @@ import {
   Row,
   Col,
   Button,
-  Card, CardImg, CardBody, CardDeck
+  Card, CardImg, CardBody, CardDeck, Badge
 } from 'reactstrap'
 
 import TopNavbar from './NavbarHome'
 import { Carousel, Jumbotron } from 'react-bootstrap'
 import axios from 'axios'
+import Loading from '../components/Loadings'
 
 import {
   BrowserRouter as Router,
@@ -90,11 +91,6 @@ class Home extends Component {
     return (
       <>
         <Row className="w-100 h-100">
-          {this.state.isLoading &&
-            <div className='d-flex justify-content-center align-items-center'>
-              Loading...
-                  </div>
-          }
           {!this.state.isLoading && (
             <div className="d-flex flex-row w-100 ml-3">
               {/* <SidebarFirst className="ml-3" /> */}
@@ -149,7 +145,12 @@ class Home extends Component {
                               <Card role='button' className="mt-3 b-shadow">
                                 <CardImg className='img-fluid' src={lis_book.image} alt="Card image cap" />
                                 <CardBody>
-                                  <div className='text-dark h5'>{lis_book.book_title}</div>
+                                  <div className="d-flex">
+                                    <div className='text-dark h5'>{lis_book.book_title}</div>
+                                    <div className="ml-2">
+                                      <h5><Badge color="primary">{lis_book.book_genre}</Badge></h5>
+                                    </div>
+                                  </div>
                                   <div className='text-muted'>{lis_book.book_status}</div>
                                   <div className='text-dark'>{lis_book.book_author}</div>
                                 </CardBody>
@@ -168,17 +169,17 @@ class Home extends Component {
                   <Col>
                     <div className='d-flex flex-row justify-content-between'>
                       <div>
-                        {<Button className="ml-5" onClick={() => this.fetchData({ ...params, page: parseInt(params.page) - 1 })}>Prev</Button>}
+                        {<Button className="ml-5" color="info" onClick={() => this.fetchData({ ...params, page: parseInt(params.page) - 1 })}>Prev</Button>}
                       </div>
                       <div>
                         {[...Array(this.state.pageInfo.totalPage)].map((o, i) => {
                           return (
-                            <Button onClick={() => this.fetchData({ ...params, page: params.page ? i + 1 : i + 1 })} className='mr-1 ml-1' key={i.toString()}>{i + 1}</Button>
+                            <Button outline color="secondary" onClick={() => this.fetchData({ ...params, page: params.page ? i + 1 : i + 1 })} className='mr-1 ml-1' key={i.toString()}>{i + 1}</Button>
                           )
                         })}
                       </div>
                       <div>
-                        <Button className="mr-5" onClick={() => this.fetchData({ ...params, page: parseInt(params.page) + 1 })}>Next</Button>
+                        <Button className="mr-5" color="success" onClick={() => this.fetchData({ ...params, page: parseInt(params.page) + 1 })}>Next</Button>
                       </div>
                     </div>
                   </Col>
@@ -187,6 +188,7 @@ class Home extends Component {
             </div>
           )}
         </Row>
+        {this.state.isLoading && (<Loading/>)}
       </>
     )
   }

@@ -10,6 +10,7 @@ import {
   Link
 } from "react-router-dom";
 import centang from '../assets/centang.png'
+import Loading from '../components/Loadings'
 
 import SweetAlert from 'react-bootstrap-sweetalert'
 
@@ -196,6 +197,7 @@ class Details extends Component {
                 <Button className='btn-success' onClick={this.home} >Home</Button>
             </ModalFooter>
           </Modal>
+          {this.state.isLoading && (<Loading/>)}
       </>
     )
   }

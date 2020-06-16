@@ -12,6 +12,7 @@ import {
   Link
 } from "react-router-dom";
 import centang from '../assets/centang.png'
+import Loading from '../components/Loadings'
 
 class Details extends Component {
   constructor(props) {

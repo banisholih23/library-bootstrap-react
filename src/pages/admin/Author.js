@@ -11,6 +11,7 @@ import SweetAlert from 'react-bootstrap-sweetalert'
 
 import { AddAuthor } from '../../components/AddAuthor'
 import { EditAuthor } from '../../components/EditAuthor'
+import Loading from '../../components/Loadings'
 
 class Author extends Component {
 
@@ -109,7 +110,7 @@ class Author extends Component {
       <>
         <Row className="no-gutters w-100 h-100">
           <div className="d-flex flex-row w-100">
-            <Sidebar />
+            {/* <Sidebar /> */}
             <div className="w-100 d-flex flex-column">
               <div className="top-navbar sticky-top">
                 <TopNavbar />
@@ -202,6 +203,7 @@ class Author extends Component {
             <Button color='secondary' onClick={this.toggleEditModal}>Cancel</Button>
           </ModalFooter>
         </Modal>
+        {this.state.isLoading && (<Loading/>)}
       </>
     )
   };

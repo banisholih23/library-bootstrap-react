@@ -9,6 +9,7 @@ import SweetAlert from 'react-bootstrap-sweetalert'
 
 import { AddGenre } from '../../components/AddGenre'
 import { EditGenre } from '../../components/EditGenre'
+import Loading from '../../components/Loadings'
 
 class Genre extends Component {
 
@@ -104,7 +105,7 @@ class Genre extends Component {
       <>
         <Row className="no-gutters w-100 h-100">
           <div className="d-flex flex-row w-100">
-            <Sidebar />
+            {/* <Sidebar /> */}
             <div className="w-100 d-flex flex-column">
               <div className="top-navbar sticky-top">
                 <TopNavbar />
@@ -177,6 +178,7 @@ class Genre extends Component {
             </div>
           </div>
         </Row>
+        {this.state.isLoading && (<Loading/>)}
       </>
     )
   };

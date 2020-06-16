@@ -11,6 +11,7 @@ import {
 import { Link } from "react-router-dom";
 
 import brand from '../assets/booklogo.png'
+import Loading from '../components/Loadings'
 
 class TopNavbar extends Component {
 
@@ -55,6 +56,7 @@ class TopNavbar extends Component {
             </div>
           </Navbar.Collapse>
         </Navbar>
+        {this.state.isLoading && (<Loading/>)}
       </>
     )
   }

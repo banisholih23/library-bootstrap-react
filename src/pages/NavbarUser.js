@@ -29,7 +29,7 @@ class TopNavbar extends Component {
                 this.setState({isLoading: false}, ()=>{
                   localStorage.removeItem('token')
                     // this.props.check()
-                    history.push('/admin')
+                    history.push('/user')
                 })
               },1000)
             })
@@ -62,13 +62,6 @@ class TopNavbar extends Component {
             <>
                 <Navbar bg="light" expand="sm" className="w-100 h-100 no-gutters top-navbar shadow">
                     <Navbar.Brand href="#home">Welcome</Navbar.Brand>
-                    <Nav>
-                        <Link className="nav-link text-decoration-none text-dark" to="/dashboard">Home</Link>
-                        <Link className="nav-link text-decoration-none text-dark" to="/author">Author</Link>
-                        <Link className="nav-link text-decoration-none text-dark" to="/genres">Genre</Link>
-                        <Link className="nav-link text-decoration-none text-dark" to="/transactions">Transactions</Link>
-                        <Link className="nav-link text-decoration-none text-dark" to="/users">User</Link>
-                    </Nav>   
                     <Navbar.Toggle aria-controls="basic-navbar-nav" />
                     <Navbar.Collapse id="basic-navbar-nav">
                         <Nav className="d-flex w-100 justify-content-center">
@@ -76,9 +69,7 @@ class TopNavbar extends Component {
                                 <FormControl type="text" placeholder="Search" onKeyDown={(e) => this.search(e)} onChange={(e) => this.setState({ query: e.target.value })} className="mr-sm-2" />
                             </Form>
                         </Nav>
-                        <div className="d-flex mr-3">
-                            <Button color="danger" onClick={this.toggleLogoutModal}>Logout</Button>
-                        </div>
+                        <Button className='text-black mr-3' color="danger" onClick={this.toggleLogoutModal}>Logout</Button>
                         <div className="navbar-brand d-flex">
                             <img src={brand} alt="brand" />
                         </div>

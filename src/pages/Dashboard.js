@@ -2,16 +2,11 @@ import React, { Component } from 'react'
 import {
   Row,
   Col,
-  Navbar,
-  NavbarBrand,
   Button,
-  FormText,
-  FormGroup,
   Form,
-  Label,
   Input,
   Modal, ModalHeader, ModalBody, ModalFooter,
-  Card, CardImg, CardBody, CardDeck
+  Card, CardImg, CardBody, CardDeck, CardTitle, CardSubtitle, CardText
 } from 'reactstrap'
 
 import TopNavbar from './Navbar'
@@ -29,6 +24,7 @@ import {
 } from "react-router-dom";
 
 import qs from 'querystring'
+import Loading from '../components/Loadings'
 
 import logo from '../assets/booklogo.png'
 import profile from '../assets/myprofile.png'
@@ -61,10 +57,10 @@ class Home extends Component {
   constructor(props) {
     super(props)
     this.checkToken = () => {
-      if(!localStorage.getItem('token')){
+      if (!localStorage.getItem('token')) {
         alert('You must login first')
         props.history.push('/admin')
-      } 
+      }
       // else {
       //   props.history.push('/home')
       // }
@@ -87,63 +83,63 @@ class Home extends Component {
       file_: {}
     }
     this.toggleAddModal = this.toggleAddModal.bind(this)
-		this.addBook = this.addBook.bind(this)
+    this.addBook = this.addBook.bind(this)
   }
 
-  toggleAddModal(){
-		this.setState({
-			showAddModal: !this.state.showAddModal
-		})
+  toggleAddModal() {
+    this.setState({
+      showAddModal: !this.state.showAddModal
+    })
   }
-  
+
   handleImage = (e) => {
-    this.setState({file: URL.createObjectURL(e.target.files[0]), file_: e.target.files[0]})
+    this.setState({ file: URL.createObjectURL(e.target.files[0]), file_: e.target.files[0] })
   }
 
-  async addBook (event) {
+  async addBook(event) {
     event.preventDefault()
-    
+
     if (this.state.file_.size > 0) {
-      if(this.state.file_.size >= 1240000 || this.state.file_.type.split('/')[0] !== 'image') {
-        swal.fire('Failed', 'Max file size is 1240KB and file type just image', 'error')
-        return ;
+      if (this.state.file_.size >= 1240000 || this.state.file_.type.split('/')[0] !== 'image') {
+        swal.fire('Failed', 'Max file size is 1.2 MB and file type just image (.img)', 'error')
+        return;
       }
     }
 
-		const {REACT_APP_URL} = process.env
+    const { REACT_APP_URL } = process.env
     const dataSubmit = new FormData()
     if (this.state.file_.size > 0) {
       dataSubmit.append('image', this.state.file_)
     }
-		// dataSubmit.append('image', this.state.image)
-		dataSubmit.set('book_title', this.state.book_title)
-		dataSubmit.set('book_desc', this.state.book_desc)
-		dataSubmit.set('book_genre', this.state.book_genre)
+    // dataSubmit.append('image', this.state.image)
+    dataSubmit.set('book_title', this.state.book_title)
+    dataSubmit.set('book_desc', this.state.book_desc)
+    dataSubmit.set('book_genre', this.state.book_genre)
     dataSubmit.set('book_author', this.state.book_author)
     dataSubmit.set('book_status', this.state.book_status)
     dataSubmit.set('created_at', this.state.created_at)
 
-		const url = `${REACT_APP_URL}books`
-		await axios.post(url, dataSubmit).then( (response) => {
-				console.log(response);
-				this.setState({showAddModal: false})
-				this.fetchData()
-				swal.fire({
-					icon: 'success',
-					title: 'Success',
-					text: 'Book has been Updated'
-				})
-			})
-			.catch(function (error) {
-				swal.fire({
-					icon: 'error',
-					title: 'haha!',
-					text: "Something's wrong"
-				})
-				console.log(error);
-			 })
-		this.props.history.push(`/dashboard`)
-	}
+    const url = `${REACT_APP_URL}books`
+    await axios.post(url, dataSubmit).then((response) => {
+      console.log(response);
+      this.setState({ showAddModal: false })
+      this.fetchData()
+      swal.fire({
+        icon: 'success',
+        title: 'Success',
+        text: 'Book has been Updated'
+      })
+    })
+      .catch(function (error) {
+        swal.fire({
+          icon: 'error',
+          title: 'haha!',
+          text: "Something's wrong"
+        })
+        console.log(error);
+      })
+    this.props.history.push(`/dashboard`)
+  }
 
   fetchData = async (params) => {
     this.setState({ isLoading: true })
@@ -161,12 +157,12 @@ class Home extends Component {
   }
 
   genreList = async () => {
-		this.setState({isLoading: true})
-		const {REACT_APP_URL} = process.env
+    this.setState({ isLoading: true })
+    const { REACT_APP_URL } = process.env
     const url = `${REACT_APP_URL}books/genres`
     console.log(url)
-		const results = await axios.get(url)
-    this.setState({genreList: results.data.data})
+    const results = await axios.get(url)
+    this.setState({ genreList: results.data.data })
     console.log(results)
   }
 
@@ -194,12 +190,12 @@ class Home extends Component {
         <Row className="w-100 h-100">
           {this.state.isLoading &&
             <div className='d-flex justify-content-center align-items-center'>
-              Loading...
-                  </div>
+
+            </div>
           }
           {!this.state.isLoading && (
             <div className="d-flex flex-row w-100 ml-3">
-              <Sidebar className="ml-3" />
+              {/* <Sidebar className="ml-3" /> */}
               <div className="w-100 h-100 d-flex flex-column">
                 <div className="top-navbar sticky-top">
                   <TopNavbar className="w-100" search={(query) => this.fetchData(query)} />
@@ -209,7 +205,7 @@ class Home extends Component {
                     <Carousel>
                       {this.state.data.map((lis_book, index) => (
                         <Carousel.Item key={lis_book.id.toString()}>
-                          <img style={{ height: '200px' }}
+                          <img style={{ height: '300px' }}
                             className="d-block"
                             src={lis_book.image}
                             alt="cover"
@@ -226,16 +222,19 @@ class Home extends Component {
                 <Row className='w-100 list-book'>
                   <Col className='list-book-content'>
                     {/* <h4 className="pl-3">List All Books</h4> */}
-                    <h4 className="pl-4 flex-row">List All Books
-                    <Col className='pl-1 mt-2'>
-									    <Button className='btn btn-add-admin' onClick={this.toggleAddModal}>Add Book</Button>
-									  </Col>
-                        <div className='d-flex justify-content-end'>
-                        {<Button className='btn-sm btn-sort' onClick={() => this.fetchData({ ...params, sort: 0 })}>Asc</Button>}&nbsp;|&nbsp;
-                          {<Button className='btn-sm btn-sort' onClick={() => this.fetchData({ ...params, sort: 1 })}>Desc</Button>}
+                    <h4 className="pl-4 flex-row">List All Books </h4>
+                    <Col className='pl-1 d-flex justify-space-beetween'>
+                      <div className="pl-4">
+                        <Button className='btn btn-add-admin' color="success" onClick={this.toggleAddModal}>Add Book</Button>
                       </div>
-                    </h4>
-                    <Row xs='4' className='w-100 mb-5 card-deck'>
+                    </Col>
+                    <Col>
+                      <div className="d-flex justify-content-end">
+                        {<Button className='btn-sm btn-sort' color="info" onClick={() => this.fetchData({ ...params, sort: 0 })}>Asc</Button>}&nbsp;|&nbsp;
+                        {<Button className='btn-sm btn-sort text-white' color="warning" onClick={() => this.fetchData({ ...params, sort: 1 })}>Desc</Button>}
+                      </div>
+                    </Col>
+                    <Row className='w-100 mb-5 card-deck'>
                       {this.state.data.map((lis_book, index) => (
                         <Link key={lis_book.id.toString()} className="text-decoration-none" to={{
                           pathname: `/detailstry/${lis_book.id}`,
@@ -249,12 +248,13 @@ class Home extends Component {
                             cover: `${lis_book.image}`
                           }
                         }}>
-                          <Col className="ml-3">
-                            <CardDeck>
+                          <Col className="ml-5" md={12}>
+                            <CardDeck top width="100%">
                               <Card role='button' className="mt-3 b-shadow">
-                                <CardImg className='img-fluid' src={lis_book.image} alt="Card image cap" />
+                                <CardImg top width="100%" src={lis_book.image} alt="Card image cap" />
                                 <CardBody>
                                   <div className='text-dark h5'>{lis_book.book_title}</div>
+                                  <div className='text-dark h5'>{lis_book.genre}</div>
                                   <div className='text-muted'>{lis_book.book_status}</div>
                                   <div className='text-dark'>{lis_book.book_author}</div>
                                 </CardBody>
@@ -273,7 +273,7 @@ class Home extends Component {
                   <Col>
                     <div className='d-flex flex-row justify-content-between'>
                       <div>
-                        {<Button className="ml-5" onClick={() => this.fetchData({ ...params, page: parseInt(params.page) - 1 })}>Prev</Button>}
+                        {<Button className="ml-5" color="info" onClick={() => this.fetchData({ ...params, page: parseInt(params.page) - 1 })}>Prev</Button>}
                       </div>
                       <div>
                         {[...Array(this.state.pageInfo.totalPage)].map((o, i) => {
@@ -283,7 +283,7 @@ class Home extends Component {
                         })}
                       </div>
                       <div>
-                        <Button className="mr-5" onClick={() => this.fetchData({ ...params, page: parseInt(params.page) + 1 })}>Next</Button>
+                        <Button className="mr-5" color="success" onClick={() => this.fetchData({ ...params, page: parseInt(params.page) + 1 })}>Next</Button>
                       </div>
                     </div>
                   </Col>
@@ -293,37 +293,38 @@ class Home extends Component {
           )}
         </Row>
         <Modal isOpen={this.state.showAddModal}>
-					<ModalHeader className='h1'>Add Book</ModalHeader>
-						<Form>
-							<ModalBody>
-									<h6>Title</h6>
-									<Input type='text' name='book_title' className='mb-2 shadow-none' onChange={this.handlerChange}/>
-									<h6>Description</h6>
-									<Input type='text' name='book_desc' className='mb-3 shadow-none' onChange={this.handlerChange}/>
-									<h6>Author</h6>
-									<Input type="text" name='book_author' className='mb-3 shadow-none' onChange={this.handlerChange} value={this.state.book_author} />
-									<h6>Genre</h6>
-                  <Input type='select' name='book_genre' className='mb-3 shadow-none' onChange={this.handlerChange} value={this.state.book_genre}>
-                    {this.state.genreList.map((book_genre, index) =>(
-                      <option key={book_genre.id.toString()} className="list-group-item bg-light" value={book_genre.name}>{book_genre.name}</option>
-                    ))}
-                  </Input>
-                  <h6>Status</h6>
-									<Input type='select' name='book_status' className='mb-3 shadow-none' onChange={this.handlerChange}>
-                    <option>Available</option>
-                    <option>Empty</option>
-                  </Input>
-                  <h6>Created-at</h6>
-									<Input type='date' name='created_at' className='mb-3 shadow-none' onChange={this.handlerChange}/>
-									<h6>Cover Image</h6>
-									<Input type="file" accept="image/*" name="file" id="file" onChange={this.handleImage}/>
-							</ModalBody>
-							<ModalFooter>
-									<Button color="primary" onClick={this.addBook}>Add Book</Button>
-									<Button color="secondary" onClick={this.toggleAddModal}>Cancel</Button>
-							</ModalFooter>
-						</Form>
-				</Modal>
+          <ModalHeader className='h1'>Add Book</ModalHeader>
+          <Form>
+            <ModalBody>
+              <h6>Title</h6>
+              <Input type='text' name='book_title' className='mb-2 shadow-none' onChange={this.handlerChange} />
+              <h6>Description</h6>
+              <Input type='text' name='book_desc' className='mb-3 shadow-none' onChange={this.handlerChange} />
+              <h6>Author</h6>
+              <Input type="text" name='book_author' className='mb-3 shadow-none' onChange={this.handlerChange} value={this.state.book_author} />
+              <h6>Genre</h6>
+              <Input type='select' name='book_genre' className='mb-3 shadow-none' onChange={this.handlerChange} value={this.state.book_genre}>
+                {this.state.genreList.map((book_genre, index) => (
+                  <option key={book_genre.id.toString()} className="list-group-item bg-light" value={book_genre.name}>{book_genre.name}</option>
+                ))}
+              </Input>
+              <h6>Status</h6>
+              <Input type='select' name='book_status' className='mb-3 shadow-none' onChange={this.handlerChange}>
+                <option>Available</option>
+                <option>Empty</option>
+              </Input>
+              <h6>Created-at</h6>
+              <Input type='date' name='created_at' className='mb-3 shadow-none' onChange={this.handlerChange} />
+              <h6>Cover Image</h6>
+              <Input type="file" accept="image/*" name="file" id="file" onChange={this.handleImage} />
+            </ModalBody>
+            <ModalFooter>
+              <Button color="primary" onClick={this.addBook}>Add Book</Button>
+              <Button color="secondary" onClick={this.toggleAddModal}>Cancel</Button>
+            </ModalFooter>
+          </Form>
+        </Modal>
+        {this.state.isLoading && (<Loading />)}
       </>
     )
   }

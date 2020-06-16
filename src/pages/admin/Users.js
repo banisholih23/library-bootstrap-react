@@ -5,6 +5,7 @@ import { Container, Row, Table, Card, Pagination } from 'react-bootstrap';
 import { Modal, ModalHeader, ModalBody, Input, ModalFooter, Button } from 'reactstrap'
 import axios from 'axios'
 import qs from 'querystring'
+import Loading from '../../components/Loadings'
 
 import SweetAlert from 'react-bootstrap-sweetalert'
 
@@ -102,7 +103,7 @@ class Users extends Component {
       <>
         <Row className="no-gutters w-100 h-100">
           <div className="d-flex flex-row w-100">
-            <Sidebar />
+            {/* <Sidebar /> */}
             <div className="w-100 d-flex flex-column">
               <div className="top-navbar sticky-top">
                 <TopNavbar />
@@ -149,6 +150,7 @@ class Users extends Component {
             </div>
           </div>
         </Row>
+        {this.state.isLoading && (<Loading/>)}
       </>
     )
   };

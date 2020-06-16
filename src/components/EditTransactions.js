@@ -14,7 +14,6 @@ export class EditTransactions extends Component {
         this.state = {
             book_id: '',
             user_id: '',
-            status_id: '',
             alert: ''
         }
         this.handlePatch = this.handlePatch.bind(this)
@@ -31,8 +30,7 @@ export class EditTransactions extends Component {
  
         const authorData = {
             book_id: this.state.book_id,
-            user_id: this.state.user_id,
-            status_id: this.state.status_id,
+            user_id: this.state.user_id
         }
 
         const url = `${REACT_APP_URL}books/transactions/${this.props.transactionsid}`
@@ -100,14 +98,6 @@ export class EditTransactions extends Component {
                         onChange={this.handleChange} 
                         type="text" placeholder="User ID" 
                         defaultValue={this.props.transactionsuser_id}/>
-                </Form.Group>
-                <Form.Group controlId="formBasicEmail">
-                    <Form.Label>Status</Form.Label>
-                    <Form.Control 
-                        name="status_id" 
-                        onChange={this.handleChange} 
-                        type="text" placeholder="Status ID" 
-                        defaultValue={this.props.transactionsstatus_id}/>
                 </Form.Group>
                 <Button onClick={this.handlePatch} variant="primary" type="submit">
                     Update

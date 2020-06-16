@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import { Row, Col, Form, FormGroup, Input, Label, Button, Modal, ModalBody, ModalHeader, ModalFooter } from 'reactstrap'
 
 import logo from '../assets/booklogo2.png'
+import Loading from '../components/Loadings'
 
 import {
   BrowserRouter as Router,
@@ -156,6 +157,7 @@ class LoginAdmin extends Component {
             <Button autoFocus onClick={() => this.setState({ showNotMatch: false })} color='primary'>OK</Button>
           </ModalFooter>
         </Modal>
+        {this.state.isLoading && (<Loading/>)}
       </>
     )
   }

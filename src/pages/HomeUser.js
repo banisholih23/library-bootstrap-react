@@ -11,15 +11,15 @@ import {
   Label,
   Input,
   Modal, ModalHeader, ModalBody, ModalFooter,
-  Card, CardImg, CardBody, CardDeck
+  Card, CardImg, CardBody, CardDeck, Badge
 } from 'reactstrap'
 
-import TopNavbar from './Navbar'
-import SidebarUser from './SidebarUser'
+import TopNavbar from './NavbarUser'
 
 import { Carousel, Jumbotron, Dropdown } from 'react-bootstrap'
 
 import axios from 'axios'
+import Loading from '../components/Loadings'
 
 import swal from 'sweetalert2'
 
@@ -49,10 +49,10 @@ class Home extends Component {
   constructor(props) {
     super(props)
     this.checkToken = () => {
-      if(!localStorage.getItem('token')){
+      if (!localStorage.getItem('token')) {
         alert('You must login first')
         props.history.push('/user')
-      } 
+      }
       else {
         props.history.push('/home')
       }
@@ -121,12 +121,12 @@ class Home extends Component {
         <Row className="w-100 h-100">
           {this.state.isLoading &&
             <div className='d-flex justify-content-center align-items-center'>
-              Loading...
-                  </div>
+
+            </div>
           }
           {!this.state.isLoading && (
             <div className="d-flex flex-row w-100 ml-3">
-              <SidebarUser className="ml-3" />
+              {/* <SidebarUser className="ml-3" /> */}
               <div className="w-100 h-100 d-flex flex-column">
                 <div className="top-navbar sticky-top">
                   <TopNavbar className="w-100" search={(query) => this.fetchData(query)} />
@@ -136,7 +136,7 @@ class Home extends Component {
                     <Carousel>
                       {this.state.data.map((lis_book, index) => (
                         <Carousel.Item>
-                          <img style={{ height: '200px' }}
+                          <img style={{ height: '300px' }}
                             className="d-block"
                             src={lis_book.image}
                             alt="cover"
@@ -155,8 +155,8 @@ class Home extends Component {
                     {/* <h4 className="pl-3">List All Books</h4> */}
                     <h4 className="pl-4 flex-row">List All Books
                       <div className='d-flex justify-content-end'>
-                        {<Button className='btn-sm btn-sort' onClick={() => this.fetchData({ ...params, sort: 0 })}>Asc</Button>}&nbsp;|&nbsp;
-                          {<Button className='btn-sm btn-sort' onClick={() => this.fetchData({ ...params, sort: 1 })}>Desc</Button>}
+                        {<Button className='btn-sm btn-sort' color="info" onClick={() => this.fetchData({ ...params, sort: 0 })}>Asc</Button>}&nbsp;|&nbsp;
+                          {<Button className='btn-sm btn-sort text-white' color="warning" onClick={() => this.fetchData({ ...params, sort: 1 })}>Desc</Button>}
                       </div>
                     </h4>
                     <Row xs='4' className='w-100 mb-5 card-deck'>
@@ -178,7 +178,12 @@ class Home extends Component {
                               <Card role='button' className="mt-3 b-shadow">
                                 <CardImg className='img-fluid' src={lis_book.image} alt="Card image cap" />
                                 <CardBody>
-                                  <div className='text-dark h5'>{lis_book.book_title}</div>
+                                  <div className="d-flex">
+                                    <div className='text-dark h5'>{lis_book.book_title}</div>
+                                    <div className="ml-2">
+                                      <h5><Badge color="primary">{lis_book.book_genre}</Badge></h5>
+                                    </div>
+                                  </div>
                                   <div className='text-muted'>{lis_book.book_status}</div>
                                   <div className='text-dark'>{lis_book.book_author}</div>
                                 </CardBody>
@@ -197,7 +202,7 @@ class Home extends Component {
                   <Col>
                     <div className='d-flex flex-row justify-content-between'>
                       <div>
-                        {<Button className="ml-5" onClick={() => this.fetchData({ ...params, page: parseInt(params.page) - 1 })}>Prev</Button>}
+                        {<Button className="ml-5" color="info" onClick={() => this.fetchData({ ...params, page: parseInt(params.page) - 1 })}>Prev</Button>}
                       </div>
                       <div>
                         {[...Array(this.state.pageInfo.totalPage)].map((o, i) => {
@@ -207,7 +212,7 @@ class Home extends Component {
                         })}
                       </div>
                       <div>
-                        <Button className="mr-5" onClick={() => this.fetchData({ ...params, page: parseInt(params.page) + 1 })}>Next</Button>
+                        <Button className="mr-5" color="success" onClick={() => this.fetchData({ ...params, page: parseInt(params.page) + 1 })}>Next</Button>
                       </div>
                     </div>
                   </Col>
@@ -216,6 +221,7 @@ class Home extends Component {
             </div>
           )}
         </Row>
+        {this.state.isLoading && (<Loading/>)}
       </>
     )
   }

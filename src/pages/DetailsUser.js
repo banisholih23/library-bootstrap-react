@@ -52,8 +52,9 @@ class Details extends Component {
     this.setState({ isLoading: true })
     const authorData = {
       book_id: this.state.id,
-      user_id: this.state.user_id,
-      status_id: this.state.status_id
+      user_id: this.state.user_id
+      // book_status: this.state.book_status,
+      // status_id: this.state.status_id
       // employee_id: this.state.employee_id
     }
 
@@ -152,8 +153,8 @@ class Details extends Component {
             <ModalBody>
               <h6>User ID</h6>
               <Input name='user_id' onChange={this.handlerChange} type='text' className='mb-2' />
-              <h6>Status</h6>
-              <Input name='status_id' onChange={this.handlerChange} type='text' className='mb-2' />
+              {/* <h6>Status</h6>
+              <Input name='status_id' onChange={this.handlerChange} type='text' className='mb-2' /> */}
               {/* <h6>Admin ID</h6>
               <Input name='employee_id' onChange={this.handlerChange} type='text' className='mb-2'/> */}
             </ModalBody>
