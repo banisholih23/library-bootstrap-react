@@ -1,14 +1,10 @@
 import React, { Component } from 'react'
-import { Row, Col, Form, FormGroup, Input, Label, Button, Modal, ModalBody, ModalHeader, ModalFooter, Jumbotron } from 'reactstrap'
+import { Row, Col, Form, FormGroup, Input, Label, Button, Modal, ModalBody, ModalHeader, ModalFooter } from 'reactstrap'
 
 import logo from '../assets/booklogo2.png'
 
-import {
-  BrowserRouter as Router,
-  Link
-} from "react-router-dom"
-
 import Loading from '../components/Loadings'
+// import { connect } from 'react-redux'
 
 
 class Login extends Component {
@@ -51,25 +47,14 @@ class Login extends Component {
     this.checkLogin()
   }
 
-  // login = (e) => {
-  //   e.preventDefault()
-  //   const data = {
-  //     userData: {
-  //       email: this.state.email,
-  //       password: this.state.password,
-  //     }
-  //   }
-  //   this.props.history.push('/list-book', data)
-  // }
-
   render() {
     return (
       <>
         <Row className='h-100 no-gutters'>
           <Col md={8} className='login-cover'>
             <div className='d-flex flex-column justify-content-between login-overlay w-100 h-100'>
-              <h1 className='text-white'>Book is a window to the world</h1>
-              <div className='text-white'>Photo by Mark Pan4ratte on Unsplash</div>
+              <h1 className='text-white p-5 font-cover'>Welcome to Bans-Library <br/> Have a Nice Day</h1>
+              <p className='text-white pl-5 font-style'>This app was made by Bani Sholih</p>
             </div>
           </Col>
           <Col md={4}>
@@ -103,12 +88,7 @@ class Login extends Component {
                     <div>Forgot Password</div>
                   </div>
                   <div className='mt-2'>
-                    {/* <Link to={'/home'}> */}
-                      <Button type="submit" color="primary">Login</Button>
-                    {/* </Link> */}
-                    <Link to={'/register'}>
-                      <Button outline color="secondary" className='ml-2'>Sign Up</Button>
-                    </Link>
+                    <Button type="submit" color="primary">Login</Button>  
                   </div>
                 </Form>
               </div>

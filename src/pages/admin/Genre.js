@@ -1,8 +1,6 @@
 import React, { Component } from 'react';
 import TopNavbar from '../Navbar'
-import Sidebar from '../Sidebar'
-import { Container, Row, Table, Card, Pagination } from 'react-bootstrap';
-import { Modal, ModalHeader, ModalBody, Input, ModalFooter, Button } from 'reactstrap'
+import { Container, Row, Table, Card, Button, CardHeader, CardBody} from 'reactstrap';
 import axios from 'axios'
 import qs from 'querystring'
 import SweetAlert from 'react-bootstrap-sweetalert'
@@ -88,9 +86,6 @@ class Genre extends Component {
   }
 
   async componentDidMount() {
-    /*        const results = await axios.get('https://api-muhilibrary.herokuapp.com/books?limit=10')
-           const {data} = results
-           this.setState(data)  */
     const param = qs.parse(this.props.location.search.slice(1))
     await this.fetchData(param)
   }
@@ -112,8 +107,8 @@ class Genre extends Component {
               </div>
               <Container fluid className="mt-4">
                 <Card>
-                  <Card.Header>Genre</Card.Header>
-                  <Card.Body>
+                  <CardHeader>Genre</CardHeader>
+                  <CardBody>
                   <button onClick={() => this.setState({ addModalShow: true })} className="btn btn-success mb-2">Add</button>
 
                   <AddGenre
@@ -159,9 +154,9 @@ class Genre extends Component {
                                     genrecreated_at: genre.created_at,
                                     genreupdated_at: genre.updated_at
                                   })
-                                }} className="btn btn-warning ml-2">Edit</Button>
+                                }} className="btn btn-warning ml-2 text-white">Edit</Button>
 
-                                <Button onClick={() => { this.onDelete(genre.id) }} className="btn btn-danger ml-2 mt-2">Delete</Button>
+                                <Button onClick={() => { this.onDelete(genre.id) }} className="btn btn-danger ml-2">Delete</Button>
                               </td>
                               {this.state.alert}
                             </tr>
@@ -172,7 +167,7 @@ class Genre extends Component {
                         <h1>Data Not Available</h1>
                       )} */}
                     </Table>
-                  </Card.Body>
+                  </CardBody>
                 </Card>
               </Container>
             </div>

@@ -1,15 +1,9 @@
 import React, { Component } from 'react'
-import cover from '../assets/covernyadilan.png'
 import axios from 'axios'
 import qs from 'querystring'
 import swal from 'sweetalert2'
 import {Col, Row, Button, Modal, ModalHeader, 
-  ModalBody, ModalFooter, Input, Form, Navbar, Badge} from 'reactstrap'
-import {
-  BrowserRouter as Router,
-  Link
-} from "react-router-dom";
-import centang from '../assets/centang.png'
+  ModalBody, ModalFooter, Input, Navbar, Badge} from 'reactstrap'
 
 class Details extends Component {
   constructor(props) {
@@ -30,7 +24,6 @@ class Details extends Component {
       status_id: '',
       created_at: '',
       user_id: '',
-      employee_id: 0,
       data: []
     }
     this.borrowBook = this.borrowBook.bind(this)
@@ -53,9 +46,6 @@ class Details extends Component {
     const authorData = {
       book_id: this.state.id,
       user_id: this.state.user_id
-      // book_status: this.state.book_status,
-      // status_id: this.state.status_id
-      // employee_id: this.state.employee_id
     }
 
     console.log(authorData)

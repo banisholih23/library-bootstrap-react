@@ -3,76 +3,34 @@ import { Row, Col, Form, FormGroup, Input, Label, Button } from 'reactstrap'
 
 import logo from '../assets/booklogo2.png'
 
-import {Link} from "react-router-dom";
-
-import swal from 'sweetalert2'
-import axios from 'axios'
-import Loading from '../components/Loadings'
-const { REACT_APP_URL } = process.env
-
-
 class Register extends Component {
+
   constructor(props) {
     super(props)
     this.state = {
       username: '',
       email: '',
-      password: '',
-      isLoading: false,
+      password: ''
     }
     this.handleRegist = this.handleRegist.bind(this)
-    this.toggleRegistSuccess = this.toggleRegistSuccess.bind(this)
   }
 
   handleChange = event => {
     this.setState({ [event.target.name]: event.target.value })
   }
 
-  toggleRegistSuccess() {
-    this.setState({
-      showRegistSuccess: !this.state.showRegistSuccess
-    })
-  }
-
-  handleRegist = async (event) => {
-    event.preventDefault()
-    this.setState({ isLoading: true })
-    const userData = {
-      username: this.state.username,
-      email: this.state.email,
-      password: this.state.password
-    }
-    console.log(this.state)
-    const url = `${REACT_APP_URL}books/auth/register`
-    console.log(url)
-    await axios.post(url, userData).then((response) => {
-      console.log(response);
-    })
-      .catch(function (error) {
-        console.log(error.response);
-        swal.fire({
-          icon: 'error',
-          title: 'Oops!',
-          text: "Something's wrong dude"
-        })
-      })
-    this.props.history.push('/home')
-    // this.fetchData()
-    swal.fire({
-      icon: 'success',
-      title: 'Success',
-      text: "Good! Thank You For Register"
-    })
+  handleRegist = async () => {
+    this.props.history.push('/registerlist', this.state);
   }
 
   render() {
     return (
       <>
         <Row className='h-100 no-gutters'>
-          <Col md={8} className='register-cover'>
-            <div className='d-flex flex-column justify-content-between login-overlay w-100 h-100'>
-              <h1 className='text-white p-5 font-cover'>Welcome to Bans-Library <br/> Have a Nice Day</h1>
-              <p className='text-white pl-5 font-style'>This app was made by Bani Sholih</p>
+          <Col md={8} className='register-cover-task'>
+            <div className='d-flex flex-column login-overlay w-100 h-100 p-5'>
+              <h1 className='text-white'>Welcome Dude,</h1>
+              <h1 className='text-white'>Please Register</h1>
             </div>
           </Col>
           <Col md={4}>
@@ -103,21 +61,13 @@ class Register extends Component {
                     </Label>
                   </FormGroup>
                   <div className='mt-100'>
-                    <Button onSubmit={this.handleRegist} color='primary'>Sign Up</Button>
-                    <Link to={'/user'}>
-                      <Button outline color='secondary' className='ml-2'>Login</Button>
-                    </Link>
+                    <Button onSubmit={this.handleRegist} color='success'>Register</Button>
                   </div>
                 </Form>
-              </div>
-              <div className='d-flex flex-column justify-content-center align-item-center'>
-                <div className='px-5'>By signing up, you agree to Book’s</div>
-                <div className='px-5'>Terms and Conditions &amp; Privacy Policy</div>
               </div>
             </div>
           </Col>
         </Row>
-        {this.state.isLoading && (<Loading/>)}
       </>
     )
   }

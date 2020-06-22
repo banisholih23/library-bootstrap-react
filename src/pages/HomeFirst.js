@@ -1,20 +1,12 @@
 import React, { Component } from 'react'
-import {
-  Row,
-  Col,
-  Button,
-  Card, CardImg, CardBody, CardDeck, Badge
-} from 'reactstrap'
+import {Row, Col, Button, Card, CardImg, CardBody, CardDeck, Badge } from 'reactstrap'
 
 import TopNavbar from './NavbarHome'
 import { Carousel, Jumbotron } from 'react-bootstrap'
 import axios from 'axios'
 import Loading from '../components/Loadings'
 
-import {
-  BrowserRouter as Router,
-  Link
-} from "react-router-dom";
+import {Link} from "react-router-dom"
 
 import qs from 'querystring'
 
@@ -93,7 +85,6 @@ class Home extends Component {
         <Row className="w-100 h-100">
           {!this.state.isLoading && (
             <div className="d-flex flex-row w-100 ml-3">
-              {/* <SidebarFirst className="ml-3" /> */}
               <div className="w-100 h-100 d-flex flex-column">
                 <div className="top-navbar sticky-top">
                   <TopNavbar className="w-100" search={(query) => this.fetchData(query)} />
@@ -122,11 +113,11 @@ class Home extends Component {
                     {/* <h4 className="pl-3">List All Books</h4> */}
                     <h4 className="pl-4 flex-row">List All Books
                       <div className='d-flex justify-content-end'>
-                        {<Button className='btn-sm btn-sort' onClick={() => this.fetchData({ ...params, sort: 0 })}>Asc</Button>}&nbsp;|&nbsp;
-                          {<Button className='btn-sm btn-sort' onClick={() => this.fetchData({ ...params, sort: 1 })}>Desc</Button>}
+                        {<Button className='btn-sm btn-sort' color="info" onClick={() => this.fetchData({ ...params, sort: 0 })}>Asc</Button>}&nbsp;|&nbsp;
+                          {<Button color="warning" className='btn-sm btn-sort' onClick={() => this.fetchData({ ...params, sort: 1 })}>Desc</Button>}
                       </div>
                     </h4>
-                    <Row xs='4' className='w-100 mb-5 card-deck'>
+                    <Row className='w-100 mb-5 card-deck'>
                       {this.state.data.map((lis_book, index) => (
                         <Link className="text-decoration-none" to={{
                           pathname: `/detailshome/${lis_book.id}`,
@@ -140,17 +131,13 @@ class Home extends Component {
                             cover: `${lis_book.image}`
                           }
                         }}>
-                          <Col className="ml-3">
-                            <CardDeck>
-                              <Card role='button' className="mt-3 b-shadow">
-                                <CardImg className='img-fluid' src={lis_book.image} alt="Card image cap" />
+                          <Col xs="12" className="ml-5">
+                            <CardDeck width="100%">
+                              <Card role='button' className="mt-3 w-100 b-shadow">
+                                <CardImg width="100%" className='img-fluid' src={lis_book.image} alt="Card image cap" />
                                 <CardBody>
-                                  <div className="d-flex">
-                                    <div className='text-dark h5'>{lis_book.book_title}</div>
-                                    <div className="ml-2">
-                                      <h5><Badge color="primary">{lis_book.book_genre}</Badge></h5>
-                                    </div>
-                                  </div>
+                                  <div className='text-dark h5'>{lis_book.book_title}</div>
+                                  <div><Badge color="primary">{lis_book.book_genre}</Badge></div>
                                   <div className='text-muted'>{lis_book.book_status}</div>
                                   <div className='text-dark'>{lis_book.book_author}</div>
                                 </CardBody>

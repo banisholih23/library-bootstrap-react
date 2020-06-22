@@ -1,9 +1,7 @@
 import React, { Component } from 'react';
 import TopNavbar from '../Navbar'
-import Sidebar from '../Sidebar'
-import swal from 'sweetalert2'
-import { Container, Row, Table, Card, Pagination } from 'react-bootstrap';
-import { Modal, ModalHeader, ModalBody, Input, ModalFooter, Button } from 'reactstrap'
+import { Container,  Row, Table, Card, CardHeader, CardBody, 
+  Modal, ModalHeader, ModalBody, Input, ModalFooter, Button } from 'reactstrap'
 import axios from 'axios'
 import qs from 'querystring'
 
@@ -91,9 +89,6 @@ class Author extends Component {
   }
 
   async componentDidMount() {
-    /*        const results = await axios.get('https://api-muhilibrary.herokuapp.com/books?limit=10')
-           const {data} = results
-           this.setState(data)  */
     const param = qs.parse(this.props.location.search.slice(1))
     await this.fetchData(param)
   }
@@ -117,8 +112,8 @@ class Author extends Component {
               </div>
               <Container fluid className="mt-4">
                 <Card>
-                  <Card.Header>Author</Card.Header>
-                  <Card.Body>
+                  <CardHeader>Author</CardHeader>
+                  <CardBody>
                     <button onClick={() => this.setState({ addModalShow: true })} className="btn btn-success mb-2">Add</button>
 
                     <AddAuthor
@@ -160,9 +155,9 @@ class Author extends Component {
                                     authorname: author.name,
                                     authordescription: author.description
                                   })
-                                }} className="btn btn-warning ml-2">Edit</Button>
+                                }} className="btn btn-warning ml-2 text-white">Edit</Button>
 
-                                <Button onClick={() => { this.onDelete(author.id) }} className="btn btn-danger ml-2 mt-2">Delete</Button>
+                                <Button onClick={() => { this.onDelete(author.id) }} className="btn btn-danger ml-2 mt-2 align-items-center">Delete</Button>
                                 {/*   <button onClick={() =>  { if (window.confirm('Are you sure you wish to delete this item?')) this.deleteAuthor(author.id)} } className="btn btn-danger ml-2">Delete</button> */}
                               </td>
                               {this.state.alert}
@@ -171,20 +166,7 @@ class Author extends Component {
                         </tbody>
                       )}
                     </Table>
-                    {/* <div className="d-flex justify-content-center">
-                      <Pagination>
-                        <Pagination.First onClick={() => this.fetchData({ ...params, page: parseInt(params.page) - 1 })} />
-                        <Pagination.Prev />
-                        {[...Array(this.state.pageInfo.totalPage)].map((o, i) => {
-                          return (
-                            <Pagination.Item onClick={() => this.fetchData({ ...params, page: params.page ? i + 1 : i + 1 })} className='mr-1 ml-1' key={i.toString()}>{i + 1}</Pagination.Item>
-                          )
-                        })}
-                        <Pagination.Next onClick={() => this.fetchData({ ...params, page: parseInt(params.page) + 1 })} />
-                        <Pagination.Last />
-                      </Pagination>
-                    </div> */}
-                  </Card.Body>
+                  </CardBody>
                 </Card>
               </Container>
             </div>

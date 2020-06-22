@@ -1,8 +1,6 @@
 import React, { Component } from 'react';
 import TopNavbar from '../Navbar'
-import Sidebar from '../Sidebar'
-import { Container, Row, Table, Card, Pagination } from 'react-bootstrap';
-import { Modal, ModalHeader, ModalBody, Input, ModalFooter, Button } from 'reactstrap'
+import {  Container, Row, Table, Card, CardHeader,CardBody, Button } from 'reactstrap'
 import axios from 'axios'
 import qs from 'querystring'
 import SweetAlert from 'react-bootstrap-sweetalert'
@@ -87,9 +85,6 @@ class Transactions extends Component {
   }
 
   async componentDidMount() {
-    /*        const results = await axios.get('https://api-muhilibrary.herokuapp.com/books?limit=10')
-           const {data} = results
-           this.setState(data)  */
     const param = qs.parse(this.props.location.search.slice(1))
     await this.fetchData(param)
   }
@@ -97,9 +92,8 @@ class Transactions extends Component {
   render() {
     const params = qs.parse(this.props.location.search.slice(1))
     params.page = params.page || 1
-    let addModalClose = () => this.setState({ addModalShow: false })
     let editModalClose = () => this.setState({editModalShow:false})
-    const {transactionsid, book_id, user_id, status_id } = this.state
+    const {transactionsid, book_id, user_id} = this.state
     return (
       <>
         <Row className="no-gutters w-100 h-100">
@@ -111,8 +105,8 @@ class Transactions extends Component {
               </div>
               <Container fluid className="mt-4">
                 <Card>
-                  <Card.Header>Transactions</Card.Header>
-                  <Card.Body>
+                  <CardHeader>Transactions</CardHeader>
+                  <CardBody>
 
                   <EditTransactions
                     show={this.state.editModalShow}
@@ -152,9 +146,9 @@ class Transactions extends Component {
                                     transactionsorderby: transactions.orderby,
                                     transactionsstatus: transactions.book_status
                                   })
-                                }} className="btn btn-warning ml-2">Edit</Button>
+                                }} className="btn btn-warning ml-2 text-white">Edit</Button>
 
-                                <Button onClick={() => { this.onDelete(transactions.id) }} className="btn btn-danger ml-2 mt-2">Delete</Button>
+                                <Button onClick={() => { this.onDelete(transactions.id) }} className="btn btn-danger ml-2">Delete</Button>
                               </td>
                               {this.state.alert}
                             </tr>
@@ -165,7 +159,7 @@ class Transactions extends Component {
                         <h1>Data Not Available</h1>
                       )} */}
                     </Table>
-                  </Card.Body>
+                  </CardBody>
                 </Card>
               </Container>
             </div>

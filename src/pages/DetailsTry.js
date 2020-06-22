@@ -1,18 +1,10 @@
 import React, { Component } from 'react'
-import cover from '../assets/covernyadilan.png'
 import axios from 'axios'
-import qs from 'querystring'
 import swal from 'sweetalert2'
 import {
   Col, Row, Button, Modal, ModalHeader,
   ModalBody, ModalFooter, Input, Form, Navbar, Badge
 } from 'reactstrap'
-import {
-  BrowserRouter as Router,
-  Link
-} from "react-router-dom";
-import centang from '../assets/centang.png'
-import Loading from '../components/Loadings'
 
 class Details extends Component {
   constructor(props) {
@@ -173,20 +165,6 @@ class Details extends Component {
     })
   }
 
-  // fetchData = async (params) => {
-  //   this.setState({ isLoading: true })
-  //   const { REACT_APP_URL } = process.env
-  //   const param = `${qs.stringify(params)}`
-  //   const url = `${REACT_APP_URL}books?${param}`
-  //   const results = await axios.get(url)
-  //   const { data } = results.data
-  //   const pageInfo = results.data.pageInfo
-  //   this.setState({ data, pageInfo, isLoading: false })
-  //   if (params) {
-  //     this.props.history.push(`?${param}`)
-  //   }
-  // }
-
   fetchData = async () => {
 		this.setState({isLoading: true})
 		const {REACT_APP_URL} = process.env
@@ -207,8 +185,6 @@ class Details extends Component {
   }
 
   async componentDidMount() {
-    // const param = qs.parse(this.props.location.search.slice(1))
-    // await this.fetchData(param)
     await this.genreList()
     const data = await this.fetchData()
     this.setState({ genreName: data.name })

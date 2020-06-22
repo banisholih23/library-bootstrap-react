@@ -24,6 +24,10 @@ import history from './utils/history'
 import HomeUser from './pages/HomeUser'
 import HomeFirst from './pages/HomeFirst'
 import DetailsUser from './pages/DetailsUser'
+import TransactionsUser from './pages/TransactionsUser'
+
+import RegisterPageTask from './pages/RegisterPageTask'
+import RegisterUserList from './pages/RegisterUserList'
 // import ListBook from './pages/ListBook'
 
 class App extends Component {
@@ -74,6 +78,11 @@ class App extends Component {
               <Route path="/genres" exact component={Genres} />
               <Route path="/users" exact component={Users} />
               <Route path="/transactions" exact component={Transactions} />
+              <Route path="/transactionsUser" exact component={TransactionsUser} />
+
+              <Route path="/registerpage" exect component={RegisterPageTask} />
+              <Route path="/registerlist" exect component={RegisterUserList} />
+
               {/* <Route path='/list-book'  component={ListBook} /> */}
             </Switch>
           </Router>

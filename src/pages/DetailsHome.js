@@ -1,15 +1,8 @@
 import React, { Component } from 'react'
-import cover from '../assets/covernyadilan.png'
 import axios from 'axios'
 import qs from 'querystring'
-import swal from 'sweetalert2'
 import {Col, Row, Button, Modal, ModalHeader, 
-  ModalBody, ModalFooter, Input, Form, Navbar, Badge} from 'reactstrap'
-import {
-  BrowserRouter as Router,
-  Link
-} from "react-router-dom";
-import centang from '../assets/centang.png'
+  ModalBody, ModalFooter, Input, Navbar, Badge} from 'reactstrap'
 import Loading from '../components/Loadings'
 
 import SweetAlert from 'react-bootstrap-sweetalert'
@@ -61,9 +54,6 @@ class Details extends Component {
     this.props.history.push('/register')
   }
 
-  componentDidMount() {
-    this.loginAlert()
-  }
   onBorrow = () => {
     const getAlert = () => (
       <SweetAlert
@@ -125,9 +115,6 @@ class Details extends Component {
   }
 
   async componentDidMount() {
-    // await this.genreList()
-    // const data = await this.fetchDataGenre()
-    // this.setState({ genreName: data.name })
     const param = qs.parse(this.props.location.search.slice(1))
     await this.fetchData(param)
   }
@@ -165,9 +152,6 @@ class Details extends Component {
             <Button type='button' className='btn btn-lg btn-borrow mr-5 text-white' color="warning" onClick={this.onBorrow}>Borrow</Button>
           </Col>
           {this.state.alert}
-          {/* <Col className='d-flex flex-row justify-content-center ' sx='3'>
-                        <Button className="btn btn-warning btn-lg text-white align-self-end b-shadow">Borrow</Button>
-                    </Col> */}
         </Row>
 
         {/* Borrow Modal */}

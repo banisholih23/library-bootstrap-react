@@ -1,12 +1,6 @@
 import React, { Component } from 'react'
 
-import {
-  Form,
-  Navbar,
-  Nav,
-  NavDropdown,
-  FormControl, Button
-} from 'react-bootstrap'
+import {Form, Navbar, Nav, FormControl, Button} from 'react-bootstrap'
 
 import { Link } from "react-router-dom";
 
@@ -35,7 +29,9 @@ class TopNavbar extends Component {
     return (
       <>
         <Navbar bg="light" expand="sm" className="w-100 h-100 no-gutters top-navbar shadow">
-          <Navbar.Brand className="ml-2" href="#home">Welcome</Navbar.Brand>
+          <Navbar.Brand>
+            <Link className="nav-link text-dark text-decoration-none" to="/">Welcome</Link>
+          </Navbar.Brand>
           <Navbar.Toggle aria-controls="basic-navbar-nav" />
           <Navbar.Collapse id="basic-navbar-nav">
             <Nav className="d-flex w-100 justify-content-center">
@@ -56,7 +52,7 @@ class TopNavbar extends Component {
             </div>
           </Navbar.Collapse>
         </Navbar>
-        {this.state.isLoading && (<Loading/>)}
+        {this.state.isLoading && (<Loading />)}
       </>
     )
   }

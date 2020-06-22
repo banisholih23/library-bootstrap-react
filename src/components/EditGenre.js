@@ -1,9 +1,6 @@
 import React, { Component } from 'react'
 import { Modal, Button, Form } from 'react-bootstrap'
 
-
-import SweetAlert from 'react-bootstrap-sweetalert'
-
 import axios from 'axios'
 const {REACT_APP_URL} = process.env
 

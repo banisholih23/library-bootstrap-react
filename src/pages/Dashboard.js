@@ -1,33 +1,18 @@
 import React, { Component } from 'react'
-import {
-  Row,
-  Col,
-  Button,
-  Form,
-  Input,
-  Modal, ModalHeader, ModalBody, ModalFooter,
-  Card, CardImg, CardBody, CardDeck, CardTitle, CardSubtitle, CardText
+import {Row, Col, Button, Form, Input, Modal, ModalHeader, 
+  ModalBody, ModalFooter, Card, CardImg, CardBody, CardDeck
 } from 'reactstrap'
 
 import TopNavbar from './Navbar'
-import Sidebar from './Sidebar'
-
-import { Carousel, Jumbotron, Dropdown } from 'react-bootstrap'
-
+import { Carousel, Jumbotron } from 'react-bootstrap'
 import axios from 'axios'
-
 import swal from 'sweetalert2'
 
-import {
-  BrowserRouter as Router,
-  Link
-} from "react-router-dom";
+import {Link} from "react-router-dom";
 
 import qs from 'querystring'
 import Loading from '../components/Loadings'
 
-import logo from '../assets/booklogo.png'
-import profile from '../assets/myprofile.png'
 
 class Home extends Component {
   state = {
@@ -37,15 +22,6 @@ class Home extends Component {
 
   handlerChange = (e) => {
     this.setState({ [e.target.name]: e.target.value })
-  }
-
-  handlerSubmit = async (event) => {
-    event.preventDefault()
-
-    const data = new FormData(event.target)
-    data.set('image', data.get('image').toUpperCase())
-
-    await axios.post('http://localhost:5000/books')
   }
 
   toggleModal() {
@@ -174,13 +150,6 @@ class Home extends Component {
     await this.fetchData(param)
   }
 
-  // async componentWillMount(){
-  //   const resultPost = await axios.post('http://localhost:5000/books')
-  //   const {data} = resultPost.data
-  //   this.setState({data})
-  //   // console.log(data)
-  // }
-
   render() {
     const params = qs.parse(this.props.location.search.slice(1))
     params.page = params.page || 1
@@ -248,7 +217,7 @@ class Home extends Component {
                             cover: `${lis_book.image}`
                           }
                         }}>
-                          <Col className="ml-5" md={12}>
+                          <Col xs="12" className="ml-5">
                             <CardDeck top width="100%">
                               <Card role='button' className="mt-3 b-shadow">
                                 <CardImg top width="100%" src={lis_book.image} alt="Card image cap" />
@@ -331,3 +300,28 @@ class Home extends Component {
 }
 
 export default Home
+
+// handleRegist = async (e) => {
+  //   e.preventDefault()
+  //   const data = {
+  //     username: this.state.username,
+  //     email: this.state.email,
+  //     password: this.state.password
+  //   }
+  //   const url = `${REACT_APP_URL}books/auth/register`
+  //   console.log(url)
+  //   await axios.post(url, data)
+  //   this.props.history.push('/registerlist')
+  // }
+
+  // handleRegist = async (e) => {
+  //   e.preventDefault()
+  //   const data = {
+  //     username: this.state.username,
+  //     email: this.state.email,
+  //     password: this.state.password
+  //   }
+  //   const result = await axios.post('http://google.com')
+  //   console.log(url)
+  //   this.props.history.push('/registerlist', result.data)
+  // }

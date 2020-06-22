@@ -4,12 +4,7 @@ import { Row, Col, Form, FormGroup, Input, Label, Button, Modal, ModalBody, Moda
 import logo from '../assets/booklogo2.png'
 import Loading from '../components/Loadings'
 
-import {
-  BrowserRouter as Router,
-  Link
-} from "react-router-dom";
-
-import AuthModel from '../models/auth'
+import { Link } from "react-router-dom";
 
 import Swal from 'sweetalert2'
 import axios from 'axios'
@@ -89,8 +84,8 @@ class LoginAdmin extends Component {
         <Row className='h-100 no-gutters'>
           <Col md={8} className='login-cover'>
             <div className='d-flex flex-column justify-content-between login-overlay w-100 h-100'>
-              <h1 className='text-white'>Book is a window to the world</h1>
-              <div className='text-white'>Photo by Mark Pan4ratte on Unsplash</div>
+              <h1 className='text-white p-5 font-cover'>Welcome to Bans-Library <br/> Have a Nice Day</h1>
+              <p className='text-white pl-5 font-style'>This app was made by Bani Sholih</p>
             </div>
           </Col>
           <Col md={4}>

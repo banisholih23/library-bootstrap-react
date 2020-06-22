@@ -1,13 +1,14 @@
-import React, { Component } from 'react'
-import TopNavbar from '../Navbar'
+import React, { Component } from 'react';
+import TopNavbar from '../pages/NavbarUser'
 import { Container, Row, Table, Card, CardHeader, CardBody, Button } from 'reactstrap'
 import axios from 'axios'
 import qs from 'querystring'
-import Loading from '../../components/Loadings'
-
 import SweetAlert from 'react-bootstrap-sweetalert'
+import Loading from '../components/Loadings'
 
-class Users extends Component {
+import { EditTransactions } from '../components/EditTransactionsUser'
+
+class Transactions extends Component {
 
   constructor(props) {
     super(props)
@@ -15,7 +16,7 @@ class Users extends Component {
       data: [],
       pageInfo: [],
       isLoading: false,
-      // addModalShow: false,
+      addModalShow: false,
       alert: null,
     }
   }
@@ -28,7 +29,7 @@ class Users extends Component {
     this.setState({ isLoading: true })
     const { REACT_APP_URL } = process.env
     const param = `${qs.stringify(params)}`
-    const url = `${REACT_APP_URL}books/auth/users?${param}`
+    const url = `${REACT_APP_URL}books/transactions?${param}`
     const results = await axios.get(url)
     const { data } = results.data
 
@@ -39,9 +40,9 @@ class Users extends Component {
     }
   }
 
-  deleteUsers = async (id) => {
+  deleteTransactions = async (id) => {
     const { REACT_APP_URL } = process.env
-    const url = `${REACT_APP_URL}books/auth/users/${id}`
+    const url = `${REACT_APP_URL}books/transactions/${id}`
     await axios.delete(url)
     console.log(this.props)
 
@@ -64,7 +65,7 @@ class Users extends Component {
         confirmBtnText="Yes, delete it!"
         confirmBtnBsStyle="danger"
         title="Are you sure?"
-        onConfirm={() => this.deleteUsers(id) && this.hideAlert()}
+        onConfirm={() => this.deleteTransactions(id) && this.hideAlert()}
         onCancel={() => this.hideAlert()}
         focusCancelBtn
       >
@@ -91,6 +92,8 @@ class Users extends Component {
   render() {
     const params = qs.parse(this.props.location.search.slice(1))
     params.page = params.page || 1
+    let editModalClose = () => this.setState({editModalShow:false})
+    const {transactionsid, book_id, user_id } = this.state
     return (
       <>
         <Row className="no-gutters w-100 h-100">
@@ -102,29 +105,49 @@ class Users extends Component {
               </div>
               <Container fluid className="mt-4">
                 <Card>
-                  <CardHeader>Users</CardHeader>
+                  <CardHeader>Transactions</CardHeader>
                   <CardBody>
+                  <EditTransactions
+                    show={this.state.editModalShow}
+                    onHide={editModalClose}
+                    refreshdata={() => this.fetchData()}
+                    transactionsid={transactionsid}
+                    book_id={book_id}
+                    user_id={user_id}
+                  />
+
                     <Table striped bordered hover>
                       <thead align="center">
                         <tr>
-                          <th>No</th>
-                          <th>Username</th>
-                          <th>Email</th>
-                          <th>Password</th>
-                          <th>Action</th>
+                          <th>Id</th>
+                          <th>Title</th>
+                          <th>Author</th>
+                          <th>OrderBy</th>
+                          <th>Status</th>
+                          <th>Actions</th>
                         </tr>
                       </thead>
                       {this.state.data.length !== 0 && (
                         <tbody align="center">
-                          {this.state.data.map((users, index) => (
-                            <tr key={users.id.toString()}>
+                          {this.state.data.map((transactions, index) => (
+                            <tr key={transactions.id.toString()}>
                               <td>{index + 1}</td>
-                              <td>{users.username}</td>
-                              <td>{users.email}</td>
-                              <td>{users.password}</td>
+                              <td>{transactions.book_title}</td>
+                              <td>{transactions.book_author}</td>
+                              <td>{transactions.orderby}</td>
+                              <td>{transactions.book_status}</td>
                               <td align="center">
+                                <Button onClick={() => {
+                                  this.setState({
+                                    editModalShow: true,
+                                    transactionsid: transactions.id,
+                                    transactionsauthor: transactions.book_author,
+                                    transactionsorderby: transactions.orderby,
+                                    transactionsstatus: transactions.book_status
+                                  })
+                                }} className="btn btn-warning ml-2">Edit</Button>
 
-                                <Button onClick={() => { this.onDelete(users.id) }} className="btn btn-danger ml-2 mt-2">Delete</Button>
+                                <Button onClick={() => { this.onDelete(transactions.id) }} className="btn btn-danger ml-2">Delete</Button>
                               </td>
                               {this.state.alert}
                             </tr>
@@ -146,4 +169,4 @@ class Users extends Component {
     )
   };
 }
-export default Users
+export default Transactions

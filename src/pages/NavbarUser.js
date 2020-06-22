@@ -61,7 +61,12 @@ class TopNavbar extends Component {
         return (
             <>
                 <Navbar bg="light" expand="sm" className="w-100 h-100 no-gutters top-navbar shadow">
-                    <Navbar.Brand href="#home">Welcome</Navbar.Brand>
+                    <Navbar.Brand>
+                        <Link className="nav-link text-dark text-decoration-none" to="/home">Welcome</Link>
+                    </Navbar.Brand>
+                    <Nav>
+                        <Link className="nav-link text-decoration-none text-dark" to="/transactionsUser">Transactions</Link>
+                    </Nav>   
                     <Navbar.Toggle aria-controls="basic-navbar-nav" />
                     <Navbar.Collapse id="basic-navbar-nav">
                         <Nav className="d-flex w-100 justify-content-center">

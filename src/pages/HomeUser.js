@@ -1,32 +1,13 @@
 import React, { Component } from 'react'
-import {
-  Row,
-  Col,
-  Navbar,
-  NavbarBrand,
-  Button,
-  FormText,
-  FormGroup,
-  Form,
-  Label,
-  Input,
-  Modal, ModalHeader, ModalBody, ModalFooter,
-  Card, CardImg, CardBody, CardDeck, Badge
-} from 'reactstrap'
+import { Row, Col, Button, Card, CardImg, CardBody, CardDeck, Badge } from 'reactstrap'
 
 import TopNavbar from './NavbarUser'
 
-import { Carousel, Jumbotron, Dropdown } from 'react-bootstrap'
+import { Carousel, Jumbotron } from 'react-bootstrap'
 
 import axios from 'axios'
 import Loading from '../components/Loadings'
-
-import swal from 'sweetalert2'
-
-import {
-  BrowserRouter as Router,
-  Link
-} from "react-router-dom";
+import {Link} from "react-router-dom";
 
 import qs from 'querystring'
 
@@ -57,15 +38,7 @@ class Home extends Component {
         props.history.push('/home')
       }
     }
-    // this.checkToken = () => {
-    //   if(!localStorage.getItem('token')){
-    //     alert('You must login first')
-    //     props.history.push('/login')
-    //   } 
-    //   else {
-    //     props.history.push('/home')
-    //   }
-    // }
+    
     this.state = {
       data: [],
       pageInfo: {},
@@ -104,13 +77,6 @@ class Home extends Component {
     const param = qs.parse(this.props.location.search.slice(1))
     await this.fetchData(param)
   }
-
-  // async componentWillMount(){
-  //   const resultPost = await axios.post('http://localhost:5000/books')
-  //   const {data} = resultPost.data
-  //   this.setState({data})
-  //   // console.log(data)
-  // }
 
   render() {
     const params = qs.parse(this.props.location.search.slice(1))
@@ -159,7 +125,7 @@ class Home extends Component {
                           {<Button className='btn-sm btn-sort text-white' color="warning" onClick={() => this.fetchData({ ...params, sort: 1 })}>Desc</Button>}
                       </div>
                     </h4>
-                    <Row xs='4' className='w-100 mb-5 card-deck'>
+                    <Row className='w-100 mb-5 card-deck'>
                       {this.state.data.map((lis_book, index) => (
                         <Link className="text-decoration-none" to={{
                           pathname: `/detailsuser/${lis_book.id}`,
@@ -173,17 +139,13 @@ class Home extends Component {
                             cover: `${lis_book.image}`
                           }
                         }}>
-                          <Col className="ml-3">
-                            <CardDeck>
-                              <Card role='button' className="mt-3 b-shadow">
-                                <CardImg className='img-fluid' src={lis_book.image} alt="Card image cap" />
+                          <Col xs="12" className="ml-5">
+                            <CardDeck width="100%">
+                              <Card role='button' className="mt-3 w-100 b-shadow">
+                                <CardImg width="100%" className='img-fluid' src={lis_book.image} alt="Card image cap" />
                                 <CardBody>
-                                  <div className="d-flex">
-                                    <div className='text-dark h5'>{lis_book.book_title}</div>
-                                    <div className="ml-2">
-                                      <h5><Badge color="primary">{lis_book.book_genre}</Badge></h5>
-                                    </div>
-                                  </div>
+                                  <div className='text-dark h5'>{lis_book.book_title}</div>
+                                  <div><Badge color="primary">{lis_book.book_genre}</Badge></div>
                                   <div className='text-muted'>{lis_book.book_status}</div>
                                   <div className='text-dark'>{lis_book.book_author}</div>
                                 </CardBody>
@@ -221,7 +183,7 @@ class Home extends Component {
             </div>
           )}
         </Row>
-        {this.state.isLoading && (<Loading/>)}
+        {this.state.isLoading && (<Loading />)}
       </>
     )
   }
