@@ -300,28 +300,3 @@ class Home extends Component {
 }
 
 export default Home
-
-// handleRegist = async (e) => {
-  //   e.preventDefault()
-  //   const data = {
-  //     username: this.state.username,
-  //     email: this.state.email,
-  //     password: this.state.password
-  //   }
-  //   const url = `${REACT_APP_URL}books/auth/register`
-  //   console.log(url)
-  //   await axios.post(url, data)
-  //   this.props.history.push('/registerlist')
-  // }
-
-  // handleRegist = async (e) => {
-  //   e.preventDefault()
-  //   const data = {
-  //     username: this.state.username,
-  //     email: this.state.email,
-  //     password: this.state.password
-  //   }
-  //   const result = await axios.post('http://google.com')
-  //   console.log(url)
-  //   this.props.history.push('/registerlist', result.data)
-  // }
