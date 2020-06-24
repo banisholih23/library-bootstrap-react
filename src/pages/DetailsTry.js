@@ -6,6 +6,10 @@ import {
   ModalBody, ModalFooter, Input, Form, Navbar, Badge
 } from 'reactstrap'
 
+import {connect} from 'react-redux'
+
+import {deleteBook, patchBook} from '../redux/actions/book'
+
 class Details extends Component {
   constructor(props) {
     super(props)
@@ -100,8 +104,8 @@ class Details extends Component {
     })
   }
   async deleteBook() {
-    const { REACT_APP_URL } = process.env
-    await axios.delete(`${REACT_APP_URL}books/${this.state.id}`)
+    const {id} = this.state
+    this.props.deleteBook(id)
     swal.fire({
       icon: 'success',
       title: 'Success',
@@ -141,11 +145,8 @@ class Details extends Component {
     bookData.set('book_status', this.state.book_status)
     bookData.set('created_at', this.state.created_at)
 
-    console.log(bookData)
-    const { REACT_APP_URL } = process.env
-    const url = `${REACT_APP_URL}books/${this.state.id}`
-    console.log(url)
-    axios.patch(url, bookData).then((response) => {
+    const {id} = this.state 
+    this.props.patchBook(id, bookData).then((response) => {
       console.log(response)
     })
       .catch(function (error) {
@@ -307,4 +308,6 @@ class Details extends Component {
   }
 }
 
-export default Details
+const mapDispatchToProps = {deleteBook, patchBook}
+
+export default connect(null, mapDispatchToProps)(Details)

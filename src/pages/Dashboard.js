@@ -13,6 +13,10 @@ import {Link} from "react-router-dom";
 import qs from 'querystring'
 import Loading from '../components/Loadings'
 
+import {connect} from 'react-redux'
+
+import {getBook, postBook} from '../redux/actions/book'
+
 
 class Home extends Component {
   state = {
@@ -82,7 +86,6 @@ class Home extends Component {
       }
     }
 
-    const { REACT_APP_URL } = process.env
     const dataSubmit = new FormData()
     if (this.state.file_.size > 0) {
       dataSubmit.append('image', this.state.file_)
@@ -95,8 +98,7 @@ class Home extends Component {
     dataSubmit.set('book_status', this.state.book_status)
     dataSubmit.set('created_at', this.state.created_at)
 
-    const url = `${REACT_APP_URL}books`
-    await axios.post(url, dataSubmit).then((response) => {
+    this.props.postBook(dataSubmit).then((response) => {
       console.log(response);
       this.setState({ showAddModal: false })
       this.fetchData()
@@ -119,17 +121,16 @@ class Home extends Component {
 
   fetchData = async (params) => {
     this.setState({ isLoading: true })
-    const { REACT_APP_URL } = process.env
     const param = `${qs.stringify(params)}`
-    const url = `${REACT_APP_URL}books?${param}`
-    // const url = 'http://localhost:5000/books'
-    const results = await axios.get(url)
-    const { data } = results.data
-    const pageInfo = results.data.pageInfo
-    this.setState({ data, pageInfo, isLoading: false })
-    if (params) {
-      this.props.history.push(`?${param}`)
-    }
+    this.props.getBook(param).then( (response) => {
+
+			const pageInfo = this.props.book.pageInfo
+	
+			this.setState({pageInfo, isLoading: false})
+			if(param){
+					this.props.history.push(`?${param}`)
+			}
+		})
   }
 
   genreList = async () => {
@@ -151,6 +152,8 @@ class Home extends Component {
   }
 
   render() {
+    const {dataBook, isLoading, pageInfo} = this.props.book
+
     const params = qs.parse(this.props.location.search.slice(1))
     params.page = params.page || 1
     params.sort = 0
@@ -172,7 +175,7 @@ class Home extends Component {
                 <Col>
                   <Jumbotron className="slider-bg mt-3">
                     <Carousel>
-                      {this.state.data.map((lis_book, index) => (
+                      {dataBook.map((lis_book, index) => (
                         <Carousel.Item key={lis_book.id.toString()}>
                           <img style={{ height: '300px' }}
                             className="d-block"
@@ -204,7 +207,7 @@ class Home extends Component {
                       </div>
                     </Col>
                     <Row className='w-100 mb-5 card-deck'>
-                      {this.state.data.map((lis_book, index) => (
+                      {dataBook.map((lis_book, index) => (
                         <Link key={lis_book.id.toString()} className="text-decoration-none" to={{
                           pathname: `/detailstry/${lis_book.id}`,
                           state: {
@@ -299,4 +302,10 @@ class Home extends Component {
   }
 }
 
-export default Home
+const mapStateToProps = state => ({
+  book: state.book
+})
+
+const mapDispatchToProps = { getBook, postBook }
+
+export default connect(mapStateToProps, mapDispatchToProps)(Home)

@@ -1,8 +1,7 @@
 import React, { Component } from 'react'
 import {
-  BrowserRouter,
-  Switch,
-  Route, Router
+  BrowserRouter as Router,
+  Switch, Route 
 } from 'react-router-dom'
 
 import axios from 'axios'
@@ -28,6 +27,8 @@ import TransactionsUser from './pages/TransactionsUser'
 
 import RegisterPageTask from './pages/RegisterPageTask'
 import RegisterUserList from './pages/RegisterUserList'
+import store from "./redux/store";
+import { Provider } from "react-redux";
 // import ListBook from './pages/ListBook'
 
 class App extends Component {
@@ -56,7 +57,7 @@ class App extends Component {
   render() {
     return (
       <>
-        <BrowserRouter>
+        <Provider store={store}>
           <Router history={history}>
             {/* <Navbar isLogin={this.state.isLogin} check={()=>this.checkLogin()} /> */}
             <Switch>
@@ -86,7 +87,7 @@ class App extends Component {
               {/* <Route path='/list-book'  component={ListBook} /> */}
             </Switch>
           </Router>
-        </BrowserRouter>
+        </Provider>
       </>
     )
   }

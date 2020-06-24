@@ -2,13 +2,18 @@ import React, { Component } from 'react'
 import { Row, Col, Form, FormGroup, Input, Label, Button } from 'reactstrap'
 
 import logo from '../assets/booklogo2.png'
-
-import {Link} from "react-router-dom";
-
-import swal from 'sweetalert2'
-import axios from 'axios'
+import { Link } from "react-router-dom";
 import Loading from '../components/Loadings'
-const { REACT_APP_URL } = process.env
+import { connect } from 'react-redux'
+import { requestRegister } from '../redux/actions/auth'
+
+const validateForm = (errors) => {
+  let valid = true;
+  Object.values(errors).forEach(
+    (val) => val.length > 0 && (valid = false)
+  );
+  return valid;
+}
 
 
 class Register extends Component {
@@ -19,6 +24,11 @@ class Register extends Component {
       email: '',
       password: '',
       isLoading: false,
+      errors: {
+        username: '',
+        email: '',
+        password: ''
+      }
     }
     this.handleRegist = this.handleRegist.bind(this)
     this.toggleRegistSuccess = this.toggleRegistSuccess.bind(this)
@@ -34,35 +44,23 @@ class Register extends Component {
     })
   }
 
-  handleRegist = async (event) => {
-    event.preventDefault()
-    this.setState({ isLoading: true })
-    const userData = {
-      username: this.state.username,
-      email: this.state.email,
-      password: this.state.password
+  handleRegist = async (e) => {
+    e.preventDefault()
+    const { username, email, password } = this.state
+    if (username.length < 1 || email.length < 1 || password.length < 1) {
+      alert('all form must be filled')
+    } else {
+      if (validateForm(this.state.errors)) {
+        const data = {
+          username,
+          email,
+          password,
+        }
+        this.props.dispatch(requestRegister(data, this.props))
+      } else {
+        alert('You failed to login')
+      }
     }
-    console.log(this.state)
-    const url = `${REACT_APP_URL}books/auth/register`
-    console.log(url)
-    await axios.post(url, userData).then((response) => {
-      console.log(response);
-    })
-      .catch(function (error) {
-        console.log(error.response);
-        swal.fire({
-          icon: 'error',
-          title: 'Oops!',
-          text: "Something's wrong dude"
-        })
-      })
-    this.props.history.push('/home')
-    // this.fetchData()
-    swal.fire({
-      icon: 'success',
-      title: 'Success',
-      text: "Good! Thank You For Register"
-    })
   }
 
   render() {
@@ -71,7 +69,7 @@ class Register extends Component {
         <Row className='h-100 no-gutters'>
           <Col md={8} className='register-cover'>
             <div className='d-flex flex-column justify-content-between login-overlay w-100 h-100'>
-              <h1 className='text-white p-5 font-cover'>Welcome to Bans-Library <br/> Have a Nice Day</h1>
+              <h1 className='text-white p-5 font-cover'>Welcome to Bans-Library <br /> Have a Nice Day</h1>
               <p className='text-white pl-5 font-style'>This app was made by Bani Sholih</p>
             </div>
           </Col>
@@ -117,10 +115,16 @@ class Register extends Component {
             </div>
           </Col>
         </Row>
-        {this.state.isLoading && (<Loading/>)}
+        {this.state.isLoading && (<Loading />)}
       </>
     )
   }
 }
 
-export default Register
+const mapStateToProps = (auth) => {
+  return {
+    auth
+  }
+}
+
+export default connect(mapStateToProps)(Register)
