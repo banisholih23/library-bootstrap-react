@@ -1,13 +1,26 @@
 import React, { Component } from 'react'
-import axios from 'axios'
 import qs from 'querystring'
 import swal from 'sweetalert2'
-import {Col, Row, Button, Modal, ModalHeader, 
-  ModalBody, ModalFooter, Input, Navbar, Badge} from 'reactstrap'
+import {Col, Row, Button, Modal, 
+  ModalBody, ModalFooter, Navbar, Badge} from 'reactstrap'
+import {connect} from 'react-redux'
+import {postTransactions} from '../redux/actions/transactions'
+import {getBook} from '../redux/actions/book'
 
 class Details extends Component {
   constructor(props) {
     super(props)
+    console.log(props)
+    this.checkToken = () => {
+      if (!localStorage.getItem('token')) {
+        alert('You must login first')
+        props.history.push('/user')
+      }
+      // else {
+      //   props.history.push('/home')
+      // }
+    }
+
     this.state = {
       showEdit: false,
       showDelete: false,
@@ -43,15 +56,14 @@ class Details extends Component {
   borrowBook = (event) => {
     event.preventDefault()
     this.setState({ isLoading: true })
+    const token = localStorage.getItem('token')
+    console.log(token)
     const authorData = {
       book_id: this.state.id,
-      user_id: this.state.user_id
+      user_id: token
     }
 
-    console.log(authorData)
-    const { REACT_APP_URL } = process.env
-    const url = `${REACT_APP_URL}books/transactions`
-    axios.post(url, authorData).then((response) => {
+    this.props.postTransactions(authorData).then((response) => {
       console.log(response)
     })
       .catch(function (error) {
@@ -59,7 +71,7 @@ class Details extends Component {
         swal.fire({
           icon: 'error',
           title: 'Oops!',
-          text: "Something's wrong, I can feel it"
+          text: "Something's wrong!"
         })
       })
     this.setState({ showBorrowModal: !this.state.showBorrowModal })
@@ -67,7 +79,7 @@ class Details extends Component {
     swal.fire({
       icon: 'success',
       title: 'Success',
-      text: 'Yay! borrow book success'
+      text: 'borrow book success!'
     })
   }
 
@@ -84,18 +96,17 @@ class Details extends Component {
 
   fetchData = async (params) => {
     this.setState({ isLoading: true })
-    const { REACT_APP_URL } = process.env
     const param = `${qs.stringify(params)}`
-    const url = `${REACT_APP_URL}books?${param}`
-    const results = await axios.get(url)
-    const { data } = results.data
-    const pageInfo = results.data.pageInfo
-    this.setState({ data, pageInfo, isLoading: false })
-    if (params) {
-      this.props.history.push(`?${param}`)
-    }
+    this.props.getBook(param).then((response) => {
+			this.setState({isLoading: false})
+			if(param){
+					this.props.history.push(`?${param}`)
+			}
+		})
   }
+
   async componentDidMount() {
+    this.checkToken()
     const param = qs.parse(this.props.location.search.slice(1))
     await this.fetchData(param)
   }
@@ -132,30 +143,19 @@ class Details extends Component {
           <Col className="borrow align-self-end d-flex justify-content-end mt-1">
             <Button type='button' className='btn btn-lg btn-borrow mr-5 text-white' color="warning" onClick={this.toggleBorrowModal}>Borrow</Button>
           </Col>
-          {/* <Col className='d-flex flex-row justify-content-center ' sx='3'>
-                        <Button className="btn btn-warning btn-lg text-white align-self-end b-shadow">Borrow</Button>
-                    </Col> */}
         </Row>
-
-        {/* Borrow Modal */}
         <Modal isOpen={this.state.showBorrowModal}>
-            <ModalHeader className='h1'>Borrow Book</ModalHeader>
-            <ModalBody>
-              <h6>User ID</h6>
-              <Input name='user_id' onChange={this.handlerChange} type='text' className='mb-2' />
-              {/* <h6>Status</h6>
-              <Input name='status_id' onChange={this.handlerChange} type='text' className='mb-2' /> */}
-              {/* <h6>Admin ID</h6>
-              <Input name='employee_id' onChange={this.handlerChange} type='text' className='mb-2'/> */}
-            </ModalBody>
-            <ModalFooter>
-              <Button color='primary' onClick={this.borrowBook}>Borrow</Button>
-              <Button color='secondary' onClick={this.toggleBorrowModal}>Cancel</Button>
-            </ModalFooter>
-          </Modal>
+          <ModalBody className='h4'>Are you sure to borrow this book?</ModalBody>
+          <ModalFooter>
+            <Button color='primary' onClick={this.borrowBook}>Borrow</Button>
+            <Button color='secondary' onClick={this.toggleBorrowModal}>Cancel</Button>
+          </ModalFooter>
+        </Modal>
       </>
     )
   }
 }
 
-export default Details
+const mapDispatchToProps = {postTransactions, getBook}
+
+export default connect(null, mapDispatchToProps)(Details)

@@ -1,23 +1,22 @@
 import React, { Component } from 'react';
 import TopNavbar from '../pages/NavbarUser'
-import { Container, Row, Table, Card, CardHeader, CardBody, Button } from 'reactstrap'
-import axios from 'axios'
+import { Container, Row, Table, Card, CardHeader, CardBody, Button} from 'reactstrap'
 import qs from 'querystring'
-import SweetAlert from 'react-bootstrap-sweetalert'
 import Loading from '../components/Loadings'
-
-import { EditTransactions } from '../components/EditTransactionsUser'
+import { connect } from 'react-redux'
+import { getTransactions, returnTransactions } from '../redux/actions/transactions'
+import swal from 'sweetalert2'
 
 class Transactions extends Component {
 
   constructor(props) {
     super(props)
+    console.log(props)
     this.state = {
       data: [],
       pageInfo: [],
       isLoading: false,
-      addModalShow: false,
-      alert: null,
+      addModalShow: false
     }
   }
 
@@ -27,62 +26,34 @@ class Transactions extends Component {
 
   fetchData = async (params) => {
     this.setState({ isLoading: true })
-    const { REACT_APP_URL } = process.env
     const param = `${qs.stringify(params)}`
-    const url = `${REACT_APP_URL}books/transactions?${param}`
-    const results = await axios.get(url)
-    const { data } = results.data
-
-    const pageInfo = results.data.pageInfo
-    this.setState({ data, pageInfo, isLoading: false })
-    if (params) {
-      this.props.history.push(`?${param}`)
-    }
+    this.props.getTransactions(param).then((response) => {
+      this.setState({ isLoading: false })
+      if (param) {
+        this.props.history.push(`?${param}`)
+      }
+    })
   }
 
-  deleteTransactions = async (id) => {
-    const { REACT_APP_URL } = process.env
-    const url = `${REACT_APP_URL}books/transactions/${id}`
-    await axios.delete(url)
-    console.log(this.props)
-
+  returnTransactions = async (id) => {
+    this.props.returnTransactions(id)
+    swal.fire({
+      icon: 'success',
+      title: 'Success',
+      text: 'return success'
+    })
     this.fetchData()
+  }
+
+  toggleReturnModal = () => {
+    this.setState({
+      showBorrowModal: !this.state.showBorrowModal
+    })
   }
 
   showModal = () => {
     this.setState({ show: true });
   };
-
-  hideModal = () => {
-    this.setState({ show: false });
-  };
-
-  onDelete = (id) => {
-    const getAlert = () => (
-      <SweetAlert
-        warning
-        showCancel
-        confirmBtnText="Yes, delete it!"
-        confirmBtnBsStyle="danger"
-        title="Are you sure?"
-        onConfirm={() => this.deleteTransactions(id) && this.hideAlert()}
-        onCancel={() => this.hideAlert()}
-        focusCancelBtn
-      >
-        Delete this id {id}
-      </SweetAlert>
-    );
-
-    this.setState({
-      alert: getAlert()
-    });
-  }
-
-  hideAlert() {
-    this.setState({
-      alert: null
-    });
-  }
 
   async componentDidMount() {
     const param = qs.parse(this.props.location.search.slice(1))
@@ -90,10 +61,10 @@ class Transactions extends Component {
   }
 
   render() {
+    const { dataTransactions } = this.props.transactions
+
     const params = qs.parse(this.props.location.search.slice(1))
     params.page = params.page || 1
-    let editModalClose = () => this.setState({editModalShow:false})
-    const {transactionsid, book_id, user_id } = this.state
     return (
       <>
         <Row className="no-gutters w-100 h-100">
@@ -105,17 +76,8 @@ class Transactions extends Component {
               </div>
               <Container fluid className="mt-4">
                 <Card>
-                  <CardHeader>Transactions</CardHeader>
+                  <CardHeader>History Transactions</CardHeader>
                   <CardBody>
-                  <EditTransactions
-                    show={this.state.editModalShow}
-                    onHide={editModalClose}
-                    refreshdata={() => this.fetchData()}
-                    transactionsid={transactionsid}
-                    book_id={book_id}
-                    user_id={user_id}
-                  />
-
                     <Table striped bordered hover>
                       <thead align="center">
                         <tr>
@@ -127,9 +89,9 @@ class Transactions extends Component {
                           <th>Actions</th>
                         </tr>
                       </thead>
-                      {this.state.data.length !== 0 && (
+                      {dataTransactions.length !== 0 && (
                         <tbody align="center">
-                          {this.state.data.map((transactions, index) => (
+                          {dataTransactions.map((transactions, index) => (
                             <tr key={transactions.id.toString()}>
                               <td>{index + 1}</td>
                               <td>{transactions.book_title}</td>
@@ -137,26 +99,13 @@ class Transactions extends Component {
                               <td>{transactions.orderby}</td>
                               <td>{transactions.book_status}</td>
                               <td align="center">
-                                <Button onClick={() => {
-                                  this.setState({
-                                    editModalShow: true,
-                                    transactionsid: transactions.id,
-                                    transactionsauthor: transactions.book_author,
-                                    transactionsorderby: transactions.orderby,
-                                    transactionsstatus: transactions.book_status
-                                  })
-                                }} className="btn btn-warning ml-2">Edit</Button>
-
-                                <Button onClick={() => { this.onDelete(transactions.id) }} className="btn btn-danger ml-2">Delete</Button>
+                                <Button onClick={() => { this.returnTransactions(transactions.id) }} className="btn btn-info ml-2">Return Book</Button>
                               </td>
                               {this.state.alert}
                             </tr>
                           ))}
                         </tbody>
                       )}
-                      {/* {this.state.data.length === 0 && (
-                        <h1>Data Not Available</h1>
-                      )} */}
                     </Table>
                   </CardBody>
                 </Card>
@@ -164,9 +113,16 @@ class Transactions extends Component {
             </div>
           </div>
         </Row>
-        {this.state.isLoading && (<Loading/>)}
+        {this.state.isLoading && (<Loading />)}
       </>
     )
   };
 }
-export default Transactions
+
+const mapStateToProps = state => ({
+  transactions: state.transactions
+})
+
+const mapDispatchToProps = { getTransactions, returnTransactions }
+
+export default connect(mapStateToProps, mapDispatchToProps)(Transactions)

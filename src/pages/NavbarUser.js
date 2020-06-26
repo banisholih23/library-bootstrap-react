@@ -58,7 +58,7 @@ class TopNavbar extends Component {
             <Link className="nav-link text-dark text-decoration-none" to="/home">Welcome</Link>
           </Navbar.Brand>
           <Nav>
-            <Link className="nav-link text-decoration-none text-dark" to="/transactionsUser">Transactions</Link>
+            <Link className="nav-link text-decoration-none text-dark" to="/transactionsUser">History</Link>
           </Nav>
           <Navbar.Toggle aria-controls="basic-navbar-nav" />
           <Navbar.Collapse id="basic-navbar-nav">

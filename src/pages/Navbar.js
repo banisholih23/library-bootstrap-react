@@ -15,6 +15,16 @@ import history from '../utils/history'
 import brand from '../assets/booklogo.png'
 import Loading from '../components/Loadings'
 
+const handleLogout = () => {
+  const token = localStorage.getItem('token');
+  if (token) {
+    localStorage.removeItem('token');
+    history.push('/admin')
+  } else {
+    alert("Something's wrong")
+  }
+}
+
 class TopNavbar extends Component {
 
   constructor(props) {
@@ -25,24 +35,13 @@ class TopNavbar extends Component {
       showLogout: false,
       dropDownAdmin: false
     }
-    this.onLogout = () => {
-      this.setState({ isLoading: true }, () => {
-        setTimeout(() => {
-          this.setState({ isLoading: false }, () => {
-            localStorage.removeItem('token')
-            // this.props.check()
-            history.push('/admin')
-          })
-        }, 1000)
-      })
-    }
     this.toggleLogoutModal = this.toggleLogoutModal.bind(this)
   }
 
   home = (e) => {
     e.preventDefault()
 
-    this.props.history.push('/home')
+    this.props.history.push('/admin')
   }
 
   toggleLogoutModal() {
@@ -111,7 +110,9 @@ class TopNavbar extends Component {
         <Modal isOpen={this.state.showLogoutModal}>
           <ModalBody className='h4'>Are you sure want to logout?</ModalBody>
           <ModalFooter>
-            <Button color='danger' className="text-white" onClick={this.onLogout}>Yes</Button>
+            <Link to="/admin">
+              <Button color="danger" onClick={(e) => { handleLogout(e) }}>Yes</Button>
+            </Link>
             <Button color='secondary' onClick={this.toggleLogoutModal}>No</Button>
           </ModalFooter>
         </Modal>

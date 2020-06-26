@@ -39,10 +39,8 @@ class Details extends Component {
     }
     this.deleteBook = this.deleteBook.bind(this)
     this.updateBook = this.updateBook.bind(this)
-    this.borrowBook = this.borrowBook.bind(this)
     this.toggleEditModal = this.toggleEditModal.bind(this)
     this.toggleDeleteModal = this.toggleDeleteModal.bind(this)
-    this.toggleBorrowModal = this.toggleBorrowModal.bind(this)
   }
 
   home = (e) => {
@@ -53,39 +51,6 @@ class Details extends Component {
 
   handlerChange = (e) => {
     this.setState({ [e.target.name]: e.target.value })
-  }
-
-  borrowBook = (event) => {
-    event.preventDefault()
-    this.setState({ isLoading: true })
-    const authorData = {
-      book_id: this.state.id,
-      user_id: this.state.user_id,
-      status_id: this.state.status_id
-      // employee_id: this.state.employee_id
-    }
-
-    console.log(authorData)
-    const { REACT_APP_URL } = process.env
-    const url = `${REACT_APP_URL}books/transactions`
-    axios.post(url, authorData).then((response) => {
-      console.log(response)
-    })
-      .catch(function (error) {
-        console.log(error.response)
-        swal.fire({
-          icon: 'error',
-          title: 'Oops!',
-          text: "Something's wrong, I can feel it"
-        })
-      })
-    this.setState({ showBorrowModal: !this.state.showBorrowModal })
-    this.props.history.push('/transactions')
-    swal.fire({
-      icon: 'success',
-      title: 'Success',
-      text: 'Yay! borrow book success'
-    })
   }
 
   toggleEditModal() {
@@ -225,12 +190,6 @@ class Details extends Component {
             <div className="h6"> {this.state.book_author} </div>
             <div className=''> {this.state.book_desc} </div>
           </Col>
-          <Col className="borrow align-self-end d-flex justify-content-end mt-1">
-            <Button type='button' className='btn btn-lg btn-borrow mr-5 text-white' color="warning" onClick={this.toggleBorrowModal}>Borrow</Button>
-          </Col>
-          {/* <Col className='d-flex flex-row justify-content-center ' sx='3'>
-                        <Button className="btn btn-warning btn-lg text-white align-self-end b-shadow">Borrow</Button>
-                    </Col> */}
         </Row>
 
         {/* Edit Modal */}
@@ -275,24 +234,6 @@ class Details extends Component {
             <Button color='secondary' onClick={this.toggleDeleteModal}>Cancel</Button>
           </ModalFooter>
         </Modal>
-
-        {/* Borrow Modal */}
-        <Modal isOpen={this.state.showBorrowModal}>
-          <ModalHeader className='h1'>Borrow Book</ModalHeader>
-          <ModalBody>
-            <h6>User ID</h6>
-            <Input name='user_id' onChange={this.handlerChange} type='text' className='mb-2' />
-            <h6>Status</h6>
-            <Input name='status_id' onChange={this.handlerChange} type='text' className='mb-2' />
-            {/* <h6>Admin ID</h6>
-              <Input name='employee_id' onChange={this.handlerChange} type='text' className='mb-2'/> */}
-          </ModalBody>
-          <ModalFooter>
-            <Button color='primary' onClick={this.borrowBook}>Borrow</Button>
-            <Button color='secondary' onClick={this.toggleBorrowModal}>Cancel</Button>
-          </ModalFooter>
-        </Modal>
-
         {/* Delete Succes Modal */}
         <Modal isOpen={this.state.showSuccessModal}>
           <ModalHeader className='h1'>Delete success</ModalHeader>

@@ -1,12 +1,13 @@
 import React, { Component } from 'react';
 import TopNavbar from '../Navbar'
 import {  Container, Row, Table, Card, CardHeader,CardBody, Button } from 'reactstrap'
-import axios from 'axios'
 import qs from 'querystring'
 import SweetAlert from 'react-bootstrap-sweetalert'
+import swal from 'sweetalert2'
 import Loading from '../../components/Loadings'
+import {connect} from 'react-redux'
+import {getTransactions, returnTransactions} from '../../redux/actions/transactions'
 
-import { EditTransactions } from '../../components/EditTransactions'
 
 class Transactions extends Component {
 
@@ -27,25 +28,22 @@ class Transactions extends Component {
 
   fetchData = async (params) => {
     this.setState({ isLoading: true })
-    const { REACT_APP_URL } = process.env
     const param = `${qs.stringify(params)}`
-    const url = `${REACT_APP_URL}books/transactions?${param}`
-    const results = await axios.get(url)
-    const { data } = results.data
-
-    const pageInfo = results.data.pageInfo
-    this.setState({ data, pageInfo, isLoading: false })
-    if (params) {
-      this.props.history.push(`?${param}`)
-    }
+    this.props.getTransactions(param).then((response) => {
+      this.setState({ isLoading: false })
+      if (param) {
+        this.props.history.push(`?${param}`)
+      }
+    })
   }
 
-  deleteTransactions = async (id) => {
-    const { REACT_APP_URL } = process.env
-    const url = `${REACT_APP_URL}books/transactions/${id}`
-    await axios.delete(url)
-    console.log(this.props)
-
+  returnTransactions = async (id) => {
+    this.props.returnTransactions(id)
+    swal.fire({
+      icon: 'success',
+      title: 'Success',
+      text: 'Delete success'
+    })
     this.fetchData()
   }
 
@@ -65,7 +63,7 @@ class Transactions extends Component {
         confirmBtnText="Yes, delete it!"
         confirmBtnBsStyle="danger"
         title="Are you sure?"
-        onConfirm={() => this.deleteTransactions(id) && this.hideAlert()}
+        onConfirm={() => this.returnTransactions(id) && this.hideAlert()}
         onCancel={() => this.hideAlert()}
         focusCancelBtn
       >
@@ -90,10 +88,10 @@ class Transactions extends Component {
   }
 
   render() {
+    const { dataTransactions } = this.props.transactions
+
     const params = qs.parse(this.props.location.search.slice(1))
     params.page = params.page || 1
-    let editModalClose = () => this.setState({editModalShow:false})
-    const {transactionsid, book_id, user_id} = this.state
     return (
       <>
         <Row className="no-gutters w-100 h-100">
@@ -107,16 +105,6 @@ class Transactions extends Component {
                 <Card>
                   <CardHeader>Transactions</CardHeader>
                   <CardBody>
-
-                  <EditTransactions
-                    show={this.state.editModalShow}
-                    onHide={editModalClose}
-                    refreshdata={() => this.fetchData()}
-                    transactionsid={transactionsid}
-                    book_id={book_id}
-                    user_id={user_id}
-                  />
-
                     <Table striped bordered hover>
                       <thead align="center">
                         <tr>
@@ -128,9 +116,9 @@ class Transactions extends Component {
                           <th>Actions</th>
                         </tr>
                       </thead>
-                      {this.state.data.length !== 0 && (
+                      {dataTransactions.length !== 0 && (
                         <tbody align="center">
-                          {this.state.data.map((transactions, index) => (
+                          {dataTransactions.map((transactions, index) => (
                             <tr key={transactions.id.toString()}>
                               <td>{index + 1}</td>
                               <td>{transactions.book_title}</td>
@@ -138,17 +126,7 @@ class Transactions extends Component {
                               <td>{transactions.orderby}</td>
                               <td>{transactions.book_status}</td>
                               <td align="center">
-                                <Button onClick={() => {
-                                  this.setState({
-                                    editModalShow: true,
-                                    transactionsid: transactions.id,
-                                    transactionsauthor: transactions.book_author,
-                                    transactionsorderby: transactions.orderby,
-                                    transactionsstatus: transactions.book_status
-                                  })
-                                }} className="btn btn-warning ml-2 text-white">Edit</Button>
-
-                                <Button onClick={() => { this.onDelete(transactions.id) }} className="btn btn-danger ml-2">Delete</Button>
+                              <Button onClick={() => { this.onDelete(transactions.id) }} className="btn btn-danger ml-2">Delete</Button>
                               </td>
                               {this.state.alert}
                             </tr>
@@ -168,6 +146,13 @@ class Transactions extends Component {
         {this.state.isLoading && (<Loading/>)}
       </>
     )
-  };
+  }
 }
-export default Transactions
+
+const mapStateToProps = state => ({
+  transactions: state.transactions
+})
+
+const mapDispatchToProps = { getTransactions, returnTransactions }
+
+export default connect(mapStateToProps, mapDispatchToProps)(Transactions)

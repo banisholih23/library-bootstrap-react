@@ -7,7 +7,7 @@ export const requestLogin = (data, props) => {
     type: getAuthAction,
     payload: postLogin(data).then(res => {
       if (res.status === 200) {
-        localStorage.setItem('token', res.data.data.token)
+        localStorage.setItem('token', res.data.data.id)
         props.history.push('/home') 
        
         Swal.fire({
