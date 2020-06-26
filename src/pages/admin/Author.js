@@ -2,14 +2,15 @@ import React, { Component } from 'react';
 import TopNavbar from '../Navbar'
 import { Container,  Row, Table, Card, CardHeader, CardBody, 
   Modal, ModalHeader, ModalBody, Input, ModalFooter, Button } from 'reactstrap'
-import axios from 'axios'
 import qs from 'querystring'
-
 import SweetAlert from 'react-bootstrap-sweetalert'
-
-import { AddAuthor } from '../../components/AddAuthor'
-import { EditAuthor } from '../../components/EditAuthor'
+import AddAuthor from '../../components/AddAuthor'
+import EditAuthor from '../../components/EditAuthor'
+import Swal from 'sweetalert2'
 import Loading from '../../components/Loadings'
+
+import {connect} from 'react-redux'
+import {getAuthor, deleteAuthor} from '../../redux/actions/author'
 
 class Author extends Component {
 
@@ -30,25 +31,22 @@ class Author extends Component {
 
   fetchData = async (params) => {
     this.setState({ isLoading: true })
-    const { REACT_APP_URL } = process.env
     const param = `${qs.stringify(params)}`
-    const url = `${REACT_APP_URL}books/author?${param}`
-    const results = await axios.get(url)
-    const { data } = results.data
-
-    const pageInfo = results.data.pageInfo
-    this.setState({ data, pageInfo, isLoading: false })
-    if (params) {
-      this.props.history.push(`?${param}`)
-    }
+    this.props.getAuthor(param).then((response) => {
+			this.setState({isLoading: false})
+			if(param){
+					this.props.history.push(`?${param}`)
+			}
+		})
   }
 
   deleteAuthor = async (id) => {
-    const { REACT_APP_URL } = process.env
-    const url = `${REACT_APP_URL}books/author/${id}`
-    await axios.delete(url)
-    console.log(this.props)
-
+    this.props.deleteAuthor(id)
+    Swal.fire({
+      icon: 'success',
+      title: 'Success',
+      text: 'Poof! delete success'
+    })
     this.fetchData()
   }
 
@@ -94,6 +92,7 @@ class Author extends Component {
   }
 
   render() {
+    const {dataAuthor} = this.props.author
     const params = qs.parse(this.props.location.search.slice(1))
     params.page = params.page || 1
 
@@ -140,9 +139,9 @@ class Author extends Component {
                           <th>Action</th>
                         </tr>
                       </thead>
-                      {this.state.data.length !== 0 && (
+                      {dataAuthor.length !== 0 && (
                         <tbody align="center">
-                          {this.state.data.map((author, index) => (
+                          {dataAuthor.map((author, index) => (
                             <tr key={author.id.toString()} >
                               <td>{index + 1}</td>
                               <td>{author.name}</td>
@@ -190,4 +189,11 @@ class Author extends Component {
     )
   };
 }
-export default Author
+
+const mapStateToProps = state => ({
+  author: state.author
+})
+
+const mapDispatchToProps = {getAuthor, deleteAuthor}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Author)

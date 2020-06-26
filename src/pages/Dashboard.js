@@ -4,7 +4,7 @@ import {Row, Col, Button, Form, Input, Modal, ModalHeader,
 } from 'reactstrap'
 
 import TopNavbar from './Navbar'
-import { Carousel, Jumbotron } from 'react-bootstrap'
+import { Carousel, Jumbotron, Dropdown, ButtonGroup } from 'react-bootstrap'
 import axios from 'axios'
 import swal from 'sweetalert2'
 
@@ -122,10 +122,8 @@ class Home extends Component {
   fetchData = async (params) => {
     this.setState({ isLoading: true })
     const param = `${qs.stringify(params)}`
-    this.props.getBook(param).then( (response) => {
-
+    this.props.getBook(param).then((response) => {
 			const pageInfo = this.props.book.pageInfo
-	
 			this.setState({pageInfo, isLoading: false})
 			if(param){
 					this.props.history.push(`?${param}`)
@@ -152,7 +150,7 @@ class Home extends Component {
   }
 
   render() {
-    const {dataBook, isLoading, pageInfo} = this.props.book
+    const {dataBook} = this.props.book
 
     const params = qs.parse(this.props.location.search.slice(1))
     params.page = params.page || 1
@@ -202,8 +200,14 @@ class Home extends Component {
                     </Col>
                     <Col>
                       <div className="d-flex justify-content-end">
-                        {<Button className='btn-sm btn-sort' color="info" onClick={() => this.fetchData({ ...params, sort: 0 })}>Asc</Button>}&nbsp;|&nbsp;
-                        {<Button className='btn-sm btn-sort text-white' color="warning" onClick={() => this.fetchData({ ...params, sort: 1 })}>Desc</Button>}
+                        <Dropdown as={ButtonGroup}>
+                          <Button color="warning text-white">Sort by</Button>
+                            <Dropdown.Toggle split variant="warning" id="dropdown-split-basic" />
+                            <Dropdown.Menu>
+                              <Dropdown.Item onClick={() => this.fetchData({ ...params, sort: 0 })}>A-Z</Dropdown.Item>
+                              <Dropdown.Item onClick={() => this.fetchData({ ...params, sort: 1 })}>Z-A</Dropdown.Item>
+                            </Dropdown.Menu>
+                        </Dropdown>
                       </div>
                     </Col>
                     <Row className='w-100 mb-5 card-deck'>
@@ -221,7 +225,7 @@ class Home extends Component {
                           }
                         }}>
                           <Col xs="12" className="ml-5">
-                            <CardDeck top width="100%">
+                            <CardDeck>
                               <Card role='button' className="mt-3 b-shadow">
                                 <CardImg top width="100%" src={lis_book.image} alt="Card image cap" />
                                 <CardBody>
@@ -236,7 +240,7 @@ class Home extends Component {
                         </Link>
                       ))}
                     </Row>
-                    {this.state.data.length === 0 && (
+                    {dataBook.length === 0 && (
                       <h2 className="text-center">Data Not Available</h2>
                     )}
                   </Col>

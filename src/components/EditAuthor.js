@@ -1,11 +1,11 @@
 import React, { Component } from 'react'
 import { Modal, Button, Form } from 'react-bootstrap'
 
-import axios from 'axios'
-const {REACT_APP_URL} = process.env
+import { connect } from 'react-redux'
+import { patchAuthor, getAuthor } from '../redux/actions/author'
+import swal from 'sweetalert2'
 
-
-export class EditAuthor extends Component {
+class EditAuthor extends Component {
     constructor(props) {
         super(props)
         this.state = {
@@ -20,6 +20,13 @@ export class EditAuthor extends Component {
     handleChange = event => {
         this.setState({[  event.target.name]: event.target.value})
     }
+
+    fetchData = async () => {
+        this.setState({ isLoading: true })
+        this.props.getAuthor().then((response) => {
+            this.setState({ isLoading: false })
+        })
+    }
        
     handlePatch = async (event) => {
         event.preventDefault()
@@ -30,16 +37,15 @@ export class EditAuthor extends Component {
             description: this.state.description
         }
 
-        const url = `${REACT_APP_URL}books/author/${this.props.authorid}`
-        await axios.patch(url, authorData).then( (response) => {
-          })
-          .catch(function (error) {
-            console.log(error.response);
-           }) 
-          
-           this.props.refreshdata()
-           this.props.onHide()
-
+        this.props.patchAuthor(`${this.props.authorid}`, authorData).then((response) => {
+            swal.fire({
+                icon: 'success',
+                title: 'Success',
+                text: 'Edit author success'
+            })
+            this.fetchData()
+            this.props.onHide()
+        })
     }
     render(){
         return(
@@ -102,3 +108,7 @@ export class EditAuthor extends Component {
         )
     }
 }
+
+const mapDispatchToProps = { patchAuthor, getAuthor }
+
+export default connect(null, mapDispatchToProps)(EditAuthor)

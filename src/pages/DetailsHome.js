@@ -125,7 +125,7 @@ class Details extends Component {
         <Row className="h-50 w100 no-gutters">
           <Col md={12} className='h-100 bg-cover' style={{ backgroundImage: `url(${this.state.cover})` }}>
             <div className='h-100 darker'>
-              <Navbar class='d-flex justify-content-between w-100 p-3'>
+              <Navbar className='d-flex justify-content-between w-100 p-3'>
                 <Button className='text-white' color="secondary" onClick={this.home}>Back</Button>
                 {/* <Button className='text-black' onClick={() => this.props.history.goBack()}>Back</Button> */}
               </Navbar>

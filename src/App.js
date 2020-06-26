@@ -19,7 +19,6 @@ import Author from './pages/admin/Author'
 import Genres from './pages/admin/Genre'
 import Users from './pages/admin/Users'
 import Transactions from './pages/admin/Transactions'
-import history from './utils/history'
 import HomeUser from './pages/HomeUser'
 import HomeFirst from './pages/HomeFirst'
 import DetailsUser from './pages/DetailsUser'
@@ -58,7 +57,7 @@ class App extends Component {
     return (
       <>
         <Provider store={store}>
-          <Router history={history}>
+          <Router>
             {/* <Navbar isLogin={this.state.isLogin} check={()=>this.checkLogin()} /> */}
             <Switch>
               {/* <Route path='/login' exact component={Login} /> */}

@@ -1,19 +1,23 @@
 import React, { Component } from 'react';
 import TopNavbar from '../Navbar'
 import { Container, Row, Table, Card, Button, CardHeader, CardBody} from 'reactstrap';
-import axios from 'axios'
 import qs from 'querystring'
 import SweetAlert from 'react-bootstrap-sweetalert'
 
-import { AddGenre } from '../../components/AddGenre'
-import { EditGenre } from '../../components/EditGenre'
+import AddGenre from '../../components/AddGenre'
+import EditGenre from '../../components/EditGenre'
 import Loading from '../../components/Loadings'
+import swal from 'sweetalert2'
+
+import {connect} from 'react-redux'
+import { getGenre, deleteGenre } from '../../redux/actions/genre'
 
 class Genre extends Component {
 
   constructor(props) {
     super(props)
     this.state = {
+      id: props.match.params.id,
       data: [],
       pageInfo: [],
       isLoading: false,
@@ -28,25 +32,22 @@ class Genre extends Component {
 
   fetchData = async (params) => {
     this.setState({ isLoading: true })
-    const { REACT_APP_URL } = process.env
     const param = `${qs.stringify(params)}`
-    const url = `${REACT_APP_URL}books/genres?${param}`
-    const results = await axios.get(url)
-    const { data } = results.data
-
-    const pageInfo = results.data.pageInfo
-    this.setState({ data, pageInfo, isLoading: false })
-    if (params) {
-      this.props.history.push(`?${param}`)
-    }
+    this.props.getGenre(param).then((response) => {
+			this.setState({isLoading: false})
+			if(param){
+					this.props.history.push(`?${param}`)
+			}
+		})
   }
 
   deleteGenre = async (id) => {
-    const { REACT_APP_URL } = process.env
-    const url = `${REACT_APP_URL}books/genres/${id}`
-    await axios.delete(url)
-    console.log(this.props)
-
+    this.props.deleteGenre(id)
+    swal.fire({
+      icon: 'success',
+      title: 'Success',
+      text: 'Poof! delete success'
+    })
     this.fetchData()
   }
 
@@ -91,6 +92,9 @@ class Genre extends Component {
   }
 
   render() {
+
+    const {dataGenre} = this.props.genre
+
     const params = qs.parse(this.props.location.search.slice(1))
     params.page = params.page || 1
     let addModalClose = () => this.setState({ addModalShow: false })
@@ -137,9 +141,9 @@ class Genre extends Component {
                           <th>Action</th>
                         </tr>
                       </thead>
-                      {this.state.data.length !== 0 && (
+                      {dataGenre.length !== 0 && (
                         <tbody align="center">
-                          {this.state.data.map((genre, index) => (
+                          {dataGenre.map((genre, index) => (
                             <tr key={genre.id.toString()}>
                               <td>{index + 1}</td>
                               <td>{genre.name}</td>
@@ -178,4 +182,11 @@ class Genre extends Component {
     )
   };
 }
-export default Genre
+
+const mapStateToProps = state => ({
+  genre: state.genre
+})
+
+const mapDispatchToProps = {getGenre, deleteGenre}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Genre)

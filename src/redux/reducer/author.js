@@ -2,20 +2,20 @@ const initialState = {
   isLoading: false,
   isError: false,
   errorMsg: '',
-  dataGenre: [],
+  dataAuthor: [],
   pageInfo: []
 }
 
-const genreReducers = (state=initialState, action) => {
+const authorReducers = (state=initialState, action) => {
   switch(action.type){
-    case 'GETGENRE_PENDING': {
+    case 'GETAUTHOR_PENDING': {
       return {
         ...state,
         isLoading: true,
         isError: false
       }
     }
-    case 'GETGENRE_REJECTED': {
+    case 'GETAUTHOR_REJECTED': {
       return {
         ...state,
         isLoading: false,
@@ -23,72 +23,72 @@ const genreReducers = (state=initialState, action) => {
         errorMsg: action.payload.response.data.message,
       }
     }
-    case 'GETGENRE_FULFILLED': {
+    case 'GETAUTHOR_FULFILLED': {
       return {
         ...state,
         isLoading: false,
         isError: false,
-        dataGenre: action.payload.data.data,
+        dataAuthor: action.payload.data.data,
         pageInfo: action.payload.data.pageInfo
       }
     }
-    case 'POSTGENRE_PENDING': {
+    case 'POSTAUTHOR_PENDING': {
       return {
         ...state,
         isLoading: true,
         isError: false
       }
     }
-    case 'POSTGENRE_REJECTED': {
+    case 'POSTAUTHOR_REJECTED': {
       return {
         ...state,
         isLoading: false,
         isError: true
       }
     }
-    case 'POSTGENRE_FULFILLED': {
+    case 'POSTAUTHOR_FULFILLED': {
       return {
         ...state,
         isLoading: false,
         isError: false
       }
     }
-    case 'PATCHGENRE_PENDING': {
+    case 'PATCHAUTHOR_PENDING': {
       return {
         ...state,
         isLoading: true,
         isError: false
       }
     }
-    case 'PATCHGENRE_REJECTED': {
+    case 'PATCHAUTHOR_REJECTED': {
       return {
         ...state,
         isLoading: false,
         isError: true
       }
     }
-    case 'PATCHGENRE_FULFILLED': {
+    case 'PATCHAUTHOR_FULFILLED': {
       return {
         ...state,
         isLoading: false,
         isError: false
       }
     }
-    case 'DELETEGENRE_PENDING': {
+    case 'DELETEAUTHOR_PENDING': {
       return {
         ...state,
         isLoading: true,
         isError: false
       }
     }
-    case 'DELETEGENRE_REJECTED': {
+    case 'DELETEAUTHOR_REJECTED': {
       return {
         ...state,
         isLoading: false,
         isError: true
       }
     }
-    case 'DELETEGENRE_FULFILLED': {
+    case 'DELETEAUTHOR_FULFILLED': {
       return {
         ...state,
         isLoading: false,
@@ -103,4 +103,4 @@ const genreReducers = (state=initialState, action) => {
   }
 }
 
-export default genreReducers
+export default authorReducers

@@ -1,11 +1,13 @@
 import React, { Component } from 'react'
 import TopNavbar from '../Navbar'
 import { Container, Row, Table, Card, CardHeader, CardBody, Button } from 'reactstrap'
-import axios from 'axios'
 import qs from 'querystring'
 import Loading from '../../components/Loadings'
+import swal from 'sweetalert2'
 
 import SweetAlert from 'react-bootstrap-sweetalert'
+import {connect} from 'react-redux'
+import {getUser, deleteUser} from '../../redux/actions/users'
 
 class Users extends Component {
 
@@ -24,27 +26,20 @@ class Users extends Component {
     this.setState({ [e.target.name]: e.target.value })
   }
 
-  fetchData = async (params) => {
+  fetchData = async () => {
     this.setState({ isLoading: true })
-    const { REACT_APP_URL } = process.env
-    const param = `${qs.stringify(params)}`
-    const url = `${REACT_APP_URL}books/auth/users?${param}`
-    const results = await axios.get(url)
-    const { data } = results.data
-
-    const pageInfo = results.data.pageInfo
-    this.setState({ data, pageInfo, isLoading: false })
-    if (params) {
-      this.props.history.push(`?${param}`)
-    }
+    this.props.getUser().then((response) => {
+			this.setState({isLoading: false})
+		})
   }
 
   deleteUsers = async (id) => {
-    const { REACT_APP_URL } = process.env
-    const url = `${REACT_APP_URL}books/auth/users/${id}`
-    await axios.delete(url)
-    console.log(this.props)
-
+    this.props.deleteUser(id)
+    swal.fire({
+      icon: 'success',
+      title: 'Success',
+      text: 'Poof! delete success'
+    })
     this.fetchData()
   }
 
@@ -89,6 +84,8 @@ class Users extends Component {
   }
 
   render() {
+
+    const {dataUser} = this.props.user
     const params = qs.parse(this.props.location.search.slice(1))
     params.page = params.page || 1
     return (
@@ -114,9 +111,9 @@ class Users extends Component {
                           <th>Action</th>
                         </tr>
                       </thead>
-                      {this.state.data.length !== 0 && (
+                      {dataUser.length !== 0 && (
                         <tbody align="center">
-                          {this.state.data.map((users, index) => (
+                          {dataUser.map((users, index) => (
                             <tr key={users.id.toString()}>
                               <td>{index + 1}</td>
                               <td>{users.username}</td>
@@ -146,4 +143,11 @@ class Users extends Component {
     )
   };
 }
-export default Users
+
+const mapStateToProps = state => ({
+  user: state.user
+})
+
+const mapDispatchToProps = {getUser, deleteUser}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Users)

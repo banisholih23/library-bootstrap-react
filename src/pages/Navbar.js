@@ -111,9 +111,7 @@ class TopNavbar extends Component {
         <Modal isOpen={this.state.showLogoutModal}>
           <ModalBody className='h4'>Are you sure want to logout?</ModalBody>
           <ModalFooter>
-            <Button color='danger'>
-              <Link className="text-white" onClick={this.onLogout}>Yes</Link>
-            </Button>
+            <Button color='danger' className="text-white" onClick={this.onLogout}>Yes</Button>
             <Button color='secondary' onClick={this.toggleLogoutModal}>No</Button>
           </ModalFooter>
         </Modal>

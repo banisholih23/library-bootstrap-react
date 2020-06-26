@@ -1,11 +1,10 @@
 import React, { Component } from 'react'
 import { Modal, Button, Form } from 'react-bootstrap'
+import {connect} from 'react-redux'
+import {getGenre, postGenre} from '../redux/actions/genre'
+import swal from 'sweetalert2'
 
-import axios from 'axios'
-const { REACT_APP_URL } = process.env
-
-
-export class AddGenre extends Component {
+class AddGenre extends Component {
   constructor(props) {
     super(props)
     this.state = {
@@ -21,29 +20,32 @@ export class AddGenre extends Component {
     this.setState({ [event.target.name]: event.target.value })
   }
 
+  fetchData = async () => {
+    this.setState({ isLoading: true })
+    this.props.getGenre().then((response) => {
+        this.setState({ isLoading: false })
+    })
+  }
 
   handlePost = async (event) => {
     event.preventDefault()
     this.setState({ isLoading: true })
-    const authorData = {
+    const genreData = {
       name: this.state.name,
       description: this.state.description,
       created_at: this.state.created_at,
       updated_at: this.state.updated_at
     }
-    console.log(this.state)
-    const url = `${REACT_APP_URL}books/genres`
-    console.log(url)
-    await axios.post(url, authorData).then((response) => {
-      console.log(response);
+    this.props.postGenre(genreData).then( (response) => {
+      swal.fire({
+       icon: 'success',
+       title: 'Success',
+       text: 'Add genre success'
+     })
+     this.fetchData()
+     this.props.onHide()
     })
-      .catch(function (error) {
-        console.log(error);
-      })
-    this.props.refreshdata()
-    this.props.onHide()
   }
-
 
   render() {
     return (
@@ -90,3 +92,7 @@ export class AddGenre extends Component {
     )
   }
 }
+
+const mapDispatchToPros = {getGenre, postGenre}
+
+export default connect(null, mapDispatchToPros)(AddGenre)

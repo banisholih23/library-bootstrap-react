@@ -2,13 +2,11 @@ import React, { Component } from 'react'
 import { Row, Col, Button, Card, CardImg, CardBody, CardDeck, Badge } from 'reactstrap'
 
 import TopNavbar from './NavbarUser'
-
-import { Carousel, Jumbotron } from 'react-bootstrap'
-
-import axios from 'axios'
+import { Carousel, Jumbotron, Dropdown, ButtonGroup } from 'react-bootstrap'
 import Loading from '../components/Loadings'
 import {Link} from "react-router-dom";
-
+import {connect} from 'react-redux'
+import {getBook} from '../redux/actions/book'
 import qs from 'querystring'
 
 class Home extends Component {
@@ -55,30 +53,25 @@ class Home extends Component {
 
   fetchData = async (params) => {
     this.setState({ isLoading: true })
-    const { REACT_APP_URL } = process.env
     const param = `${qs.stringify(params)}`
-    const url = `${REACT_APP_URL}books?${param}`
-    // const url = 'http://localhost:5000/books'
-    const results = await axios.get(url)
-    const { data } = results.data
-    const pageInfo = results.data.pageInfo
-    this.setState({ data, pageInfo, isLoading: false })
-    if (params) {
-      this.props.history.push(`?${param}`)
-    }
+    this.props.getBook(param).then((response) => {
+			const pageInfo = this.props.book.pageInfo
+			this.setState({pageInfo, isLoading: false})
+			if(param){
+					this.props.history.push(`?${param}`)
+			}
+		})
   }
 
   async componentDidMount() {
     this.checkToken()
-    const results = await axios.get('http://localhost:5000/books')
-    const { data } = results.data
-    this.setState({ data })
-    console.log(data)
     const param = qs.parse(this.props.location.search.slice(1))
     await this.fetchData(param)
   }
 
   render() {
+    const {dataBook} = this.props.book
+
     const params = qs.parse(this.props.location.search.slice(1))
     params.page = params.page || 1
     params.sort = 0
@@ -100,8 +93,8 @@ class Home extends Component {
                 <Col>
                   <Jumbotron className="slider-bg mt-3">
                     <Carousel>
-                      {this.state.data.map((lis_book, index) => (
-                        <Carousel.Item>
+                      {dataBook.map((lis_book, index) => (
+                        <Carousel.Item key={lis_book.id.toString()}>
                           <img style={{ height: '300px' }}
                             className="d-block"
                             src={lis_book.image}
@@ -121,13 +114,19 @@ class Home extends Component {
                     {/* <h4 className="pl-3">List All Books</h4> */}
                     <h4 className="pl-4 flex-row">List All Books
                       <div className='d-flex justify-content-end'>
-                        {<Button className='btn-sm btn-sort' color="info" onClick={() => this.fetchData({ ...params, sort: 0 })}>Asc</Button>}&nbsp;|&nbsp;
-                          {<Button className='btn-sm btn-sort text-white' color="warning" onClick={() => this.fetchData({ ...params, sort: 1 })}>Desc</Button>}
+                        <Dropdown as={ButtonGroup}>
+                          <Button color="warning text-white">Sort by</Button>
+                            <Dropdown.Toggle split variant="warning" id="dropdown-split-basic" />
+                            <Dropdown.Menu>
+                              <Dropdown.Item onClick={() => this.fetchData({ ...params, sort: 0 })}>A-Z</Dropdown.Item>
+                              <Dropdown.Item onClick={() => this.fetchData({ ...params, sort: 1 })}>Z-A</Dropdown.Item>
+                            </Dropdown.Menu>
+                        </Dropdown>
                       </div>
                     </h4>
                     <Row className='w-100 mb-5 card-deck'>
-                      {this.state.data.map((lis_book, index) => (
-                        <Link className="text-decoration-none" to={{
+                      {dataBook.map((lis_book, index) => (
+                        <Link key={lis_book.id.toString()} className="text-decoration-none" to={{
                           pathname: `/detailsuser/${lis_book.id}`,
                           state: {
                             id: `${lis_book.id}`,
@@ -155,7 +154,7 @@ class Home extends Component {
                         </Link>
                       ))}
                     </Row>
-                    {this.state.data.length === 0 && (
+                    {dataBook.length === 0 && (
                       <h2 className="text-center">Data Not Available</h2>
                     )}
                   </Col>
@@ -189,4 +188,10 @@ class Home extends Component {
   }
 }
 
-export default Home
+const mapStateToProps = state => ({
+  book: state.book
+})
+
+const mapDispatchToProps = { getBook }
+
+export default connect(mapStateToProps, mapDispatchToProps)(Home)

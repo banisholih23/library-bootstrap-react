@@ -1,11 +1,11 @@
 import React, { Component } from 'react'
 import { Modal, Button, Form } from 'react-bootstrap'
+import {connect} from 'react-redux'
+import {getAuthor, postAuthor} from '../redux/actions/author'
+import swal from 'sweetalert2'
 
-import axios from 'axios'
-const { REACT_APP_URL } = process.env
 
-
-export class AddAuthor extends Component {
+class AddAuthor extends Component {
   constructor(props) {
     super(props)
     this.state = {
@@ -20,6 +20,12 @@ export class AddAuthor extends Component {
     this.setState({ [event.target.name]: event.target.value })
   }
 
+  fetchData = async () => {
+    this.setState({ isLoading: true })
+    this.props.getAuthor().then((response) => {
+        this.setState({ isLoading: false })
+    })
+  }
 
   handlePost = async (event) => {
     event.preventDefault()
@@ -28,17 +34,15 @@ export class AddAuthor extends Component {
       name: this.state.name,
       description: this.state.description
     }
-    console.log(this.state)
-    const url = `${REACT_APP_URL}books/author`
-    console.log(url)
-    await axios.post(url, authorData).then((response) => {
-      console.log(response);
+    this.props.postAuthor(authorData).then( (response) => {
+      swal.fire({
+       icon: 'success',
+       title: 'Success',
+       text: 'Add author success'
+     })
+     this.fetchData()
+     this.props.onHide()
     })
-      .catch(function (error) {
-        console.log(error);
-      })
-    this.props.refreshdata()
-    this.props.onHide()
   }
 
 
@@ -83,3 +87,6 @@ export class AddAuthor extends Component {
     )
   }
 }
+const mapDispatchToPros = {getAuthor, postAuthor}
+
+export default connect(null, mapDispatchToPros)(AddAuthor)

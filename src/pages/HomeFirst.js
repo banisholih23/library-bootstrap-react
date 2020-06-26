@@ -3,12 +3,14 @@ import {Row, Col, Button, Card, CardImg, CardBody, CardDeck, Badge } from 'react
 
 import TopNavbar from './NavbarHome'
 import { Carousel, Jumbotron } from 'react-bootstrap'
-import axios from 'axios'
 import Loading from '../components/Loadings'
 
 import {Link} from "react-router-dom"
 
 import qs from 'querystring'
+import {connect} from 'react-redux'
+
+import {getBook} from '../redux/actions/book'
 
 class Home extends Component {
   state = {
@@ -44,39 +46,24 @@ class Home extends Component {
 
   fetchData = async (params) => {
     this.setState({ isLoading: true })
-    const { REACT_APP_URL } = process.env
     const param = `${qs.stringify(params)}`
-    const url = `${REACT_APP_URL}books?${param}`
-    // const url = 'http://localhost:5000/books'
-    const results = await axios.get(url)
-    const { data } = results.data
-    const pageInfo = results.data.pageInfo
-    this.setState({ data, pageInfo, isLoading: false })
-    if (params) {
-      this.props.history.push(`?${param}`)
-    }
+    this.props.getBook(param).then((response) => {
+			const pageInfo = this.props.book.pageInfo
+			this.setState({pageInfo, isLoading: false})
+			if(param){
+					this.props.history.push(`?${param}`)
+			}
+		})
   }
 
   async componentDidMount() {
-    // this.checkToken()
-    const { REACT_APP_URL } = process.env
-    const url = `${REACT_APP_URL}books`
-    const results = await axios.get(url)
-    const { data } = results.data
-    this.setState({ data })
-    console.log(data)
     const param = qs.parse(this.props.location.search.slice(1))
     await this.fetchData(param)
   }
 
-  // async componentWillMount(){
-  //   const resultPost = await axios.post('http://localhost:5000/books')
-  //   const {data} = resultPost.data
-  //   this.setState({data})
-  //   // console.log(data)
-  // }
-
   render() {
+    const {dataBook} = this.props.book
+
     const params = qs.parse(this.props.location.search.slice(1))
     params.page = params.page || 1
     params.sort = 0
@@ -92,8 +79,8 @@ class Home extends Component {
                 <Col>
                   <Jumbotron className="slider-bg mt-4">
                     <Carousel>
-                      {this.state.data.map((lis_book, index) => (
-                        <Carousel.Item>
+                      {dataBook.map((lis_book, index) => (
+                        <Carousel.Item key={lis_book.id.toString()}>
                           <img style={{ height: '300px' }}
                             className="d-block"
                             src={lis_book.image}
@@ -118,8 +105,8 @@ class Home extends Component {
                       </div>
                     </h4>
                     <Row className='w-100 mb-5 card-deck'>
-                      {this.state.data.map((lis_book, index) => (
-                        <Link className="text-decoration-none" to={{
+                      {dataBook.map((lis_book, index) => (
+                        <Link key={lis_book.id.toString()} className="text-decoration-none" to={{
                           pathname: `/detailshome/${lis_book.id}`,
                           state: {
                             id: `${lis_book.id}`,
@@ -147,7 +134,7 @@ class Home extends Component {
                         </Link>
                       ))}
                     </Row>
-                    {this.state.data.length === 0 && (
+                    {dataBook.length === 0 && (
                       <h2 className="text-center">Data Not Available</h2>
                     )}
                   </Col>
@@ -181,4 +168,10 @@ class Home extends Component {
   }
 }
 
-export default Home
+const mapStateToProps = state => ({
+  book: state.book
+})
+
+const mapDispatchToProps = { getBook }
+
+export default connect(mapStateToProps, mapDispatchToProps)(Home)

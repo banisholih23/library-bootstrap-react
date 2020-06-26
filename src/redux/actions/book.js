@@ -9,19 +9,19 @@ return {
   }
 }
 
-const postBook = (dataSubmit) =>{
+const postBook = (dataPost) =>{
 const url = `${REACT_APP_URL}books`
 return {
   type: 'POSTBOOK',
-  payload: http().post(url, dataSubmit)
+  payload: http().post(url, dataPost)
   }
 }
 
-const patchBook = (id, bookData) =>{
+const patchBook = (id, dataBook) =>{
 const url = `${REACT_APP_URL}books/${id}`
 return {
   type: 'PATCHBOOK',
-  payload: http().patch(url, bookData)
+  payload: http().patch(url, dataBook)
   }
 }
 

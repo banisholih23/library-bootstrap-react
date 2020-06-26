@@ -1,5 +1,4 @@
 import axios from 'axios'
-import qs from 'querystring'
 const { REACT_APP_URL } = process.env
 const API_TOKEN = localStorage.getItem('token')
 
