@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import {
   BrowserRouter as Router,
-  Switch, Route 
+  Switch, Route
 } from 'react-router-dom'
 
 import axios from 'axios'
@@ -12,7 +12,6 @@ import Register from './pages/Register'
 import Dashboard from './pages/Dashboard'
 import DetailsHome from './pages/DetailsHome'
 import DetailsTry from './pages/DetailsTry'
-// import LoginAdmin from './pages/LoginAdmin'
 import Sidebar from './pages/Sidebar'
 import Navbar from './pages/Navbar'
 import Author from './pages/admin/Author'
@@ -26,9 +25,9 @@ import TransactionsUser from './pages/TransactionsUser'
 
 import RegisterPageTask from './pages/RegisterPageTask'
 import RegisterUserList from './pages/RegisterUserList'
-import store from "./redux/store";
+import {store, persistor} from "./redux/store";
 import { Provider } from "react-redux";
-// import ListBook from './pages/ListBook'
+import { PersistGate } from 'redux-persist/integration/react'
 
 class App extends Component {
   constructor(props) {
@@ -57,35 +56,30 @@ class App extends Component {
     return (
       <>
         <Provider store={store}>
-          <Router>
-            {/* <Navbar isLogin={this.state.isLogin} check={()=>this.checkLogin()} /> */}
-            <Switch>
-              {/* <Route path='/login' exact component={Login} /> */}
-              <Route path='/' exact component={HomeFirst} />
-              <Route path='/home' exact render={(props)=><HomeUser {...props}/>} />
-              <Route path='/admin' render={(props) => <LoginAdmin {...props} check={() => this.checkLogin()} />} exact />
-              <Route path='/user' render={(props) => <LoginUser {...props} check={() => this.checkLogin()} />} exact />
-              <Route path='/dashboard' render={(props) => <Dashboard {...props} />} exact></Route>
-              <Route path='/register' exact component={Register} />
-              {/* <Route path='/home' component={Home} /> */}
-              <Route path='/detailstry/:id' exact component={DetailsTry} />
-              <Route path='/detailshome/:id' exact component={DetailsHome} />
-              <Route path='/detailsuser/:id' exact component={DetailsUser} />
-              {/* <Route path='/adminlogin' exact component={LoginAdmin} /> */}
-              <Route path='/sidebar' exact component={Sidebar} />
-              <Route path='/navbar' exact component={Navbar} />
-              <Route path="/author" exact component={Author} />
-              <Route path="/genres" exact component={Genres} />
-              <Route path="/users" exact component={Users} />
-              <Route path="/transactions" exact component={Transactions} />
-              <Route path="/transactionsUser" exact component={TransactionsUser} />
-
-              <Route path="/registerpage" exect component={RegisterPageTask} />
-              <Route path="/registerlist" exect component={RegisterUserList} />
-
-              {/* <Route path='/list-book'  component={ListBook} /> */}
-            </Switch>
-          </Router>
+          <PersistGate loading={null} persistor={persistor}>
+            <Router>
+              <Switch>
+                <Route path='/' exact component={HomeFirst} />
+                <Route path='/home' exact render={(props) => <HomeUser {...props} />} />
+                <Route path='/admin' render={(props) => <LoginAdmin {...props} check={() => this.checkLogin()} />} exact />
+                <Route path='/user' render={(props) => <LoginUser {...props} check={() => this.checkLogin()} />} exact />
+                <Route path='/dashboard' render={(props) => <Dashboard {...props} />} exact></Route>
+                <Route path='/register' exact component={Register} />
+                <Route path='/detailstry/:id' exact component={DetailsTry} />
+                <Route path='/detailshome/:id' exact component={DetailsHome} />
+                <Route path='/detailsuser/:id' exact component={DetailsUser} />
+                <Route path='/sidebar' exact component={Sidebar} />
+                <Route path='/navbar' exact component={Navbar} />
+                <Route path="/author" exact component={Author} />
+                <Route path="/genres" exact component={Genres} />
+                <Route path="/users" exact component={Users} />
+                <Route path="/transactions" exact component={Transactions} />
+                <Route path="/transactionsUser" exact component={TransactionsUser} />
+                <Route path="/registerpage" exect component={RegisterPageTask} />
+                <Route path="/registerlist" exect component={RegisterUserList} />
+              </Switch>
+            </Router>
+          </PersistGate>
         </Provider>
       </>
     )

@@ -38,6 +38,7 @@ class Home extends Component {
     }
     
     this.state = {
+      dataBook: [],
       data: [],
       pageInfo: {},
       isLoading: false,
@@ -55,8 +56,9 @@ class Home extends Component {
     this.setState({ isLoading: true })
     const param = `${qs.stringify(params)}`
     this.props.getBook(param).then((response) => {
+      const { dataBook } = this.props.book
 			const pageInfo = this.props.book.pageInfo
-			this.setState({pageInfo, isLoading: false})
+			this.setState({dataBook, pageInfo, isLoading: false})
 			if(param){
 					this.props.history.push(`?${param}`)
 			}
@@ -70,8 +72,6 @@ class Home extends Component {
   }
 
   render() {
-    const {dataBook} = this.props.book
-
     const params = qs.parse(this.props.location.search.slice(1))
     params.page = params.page || 1
     params.sort = 0
@@ -93,7 +93,7 @@ class Home extends Component {
                 <Col>
                   <Jumbotron className="slider-bg mt-3">
                     <Carousel>
-                      {dataBook.map((lis_book, index) => (
+                      {this.state.dataBook.map((lis_book, index) => (
                         <Carousel.Item key={lis_book.id.toString()}>
                           <img style={{ height: '300px' }}
                             className="d-block"
@@ -125,7 +125,7 @@ class Home extends Component {
                       </div>
                     </h4>
                     <Row className='w-100 mb-5 card-deck'>
-                      {dataBook.map((lis_book, index) => (
+                      {this.state.dataBook.map((lis_book, index) => (
                         <Link key={lis_book.id.toString()} className="text-decoration-none" to={{
                           pathname: `/detailsuser/${lis_book.id}`,
                           state: {
@@ -154,7 +154,7 @@ class Home extends Component {
                         </Link>
                       ))}
                     </Row>
-                    {dataBook.length === 0 && (
+                    {this.state.dataBook.length === 0 && (
                       <h2 className="text-center">Data Not Available</h2>
                     )}
                   </Col>

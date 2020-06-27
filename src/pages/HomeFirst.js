@@ -1,16 +1,16 @@
 import React, { Component } from 'react'
-import {Row, Col, Button, Card, CardImg, CardBody, CardDeck, Badge } from 'reactstrap'
+import { Row, Col, Button, Card, CardImg, CardBody, CardDeck, Badge } from 'reactstrap'
 
 import TopNavbar from './NavbarHome'
-import { Carousel, Jumbotron } from 'react-bootstrap'
+import { Carousel, Jumbotron, Dropdown, ButtonGroup } from 'react-bootstrap'
 import Loading from '../components/Loadings'
 
-import {Link} from "react-router-dom"
+import { Link } from "react-router-dom"
 
 import qs from 'querystring'
-import {connect} from 'react-redux'
+import { connect } from 'react-redux'
 
-import {getBook} from '../redux/actions/book'
+import { getBook } from '../redux/actions/book'
 
 class Home extends Component {
   state = {
@@ -48,12 +48,12 @@ class Home extends Component {
     this.setState({ isLoading: true })
     const param = `${qs.stringify(params)}`
     this.props.getBook(param).then((response) => {
-			const pageInfo = this.props.book.pageInfo
-			this.setState({pageInfo, isLoading: false})
-			if(param){
-					this.props.history.push(`?${param}`)
-			}
-		})
+      const pageInfo = this.props.book.pageInfo
+      this.setState({ pageInfo, isLoading: false })
+      if (param) {
+        this.props.history.push(`?${param}`)
+      }
+    })
   }
 
   async componentDidMount() {
@@ -62,7 +62,7 @@ class Home extends Component {
   }
 
   render() {
-    const {dataBook} = this.props.book
+    const { dataBook } = this.props.book
 
     const params = qs.parse(this.props.location.search.slice(1))
     params.page = params.page || 1
@@ -100,8 +100,14 @@ class Home extends Component {
                     {/* <h4 className="pl-3">List All Books</h4> */}
                     <h4 className="pl-4 flex-row">List All Books
                       <div className='d-flex justify-content-end'>
-                        {<Button className='btn-sm btn-sort' color="info" onClick={() => this.fetchData({ ...params, sort: 0 })}>Asc</Button>}&nbsp;|&nbsp;
-                          {<Button color="warning" className='btn-sm btn-sort' onClick={() => this.fetchData({ ...params, sort: 1 })}>Desc</Button>}
+                        <Dropdown as={ButtonGroup}>
+                          <Button color="warning text-white">Sort by</Button>
+                          <Dropdown.Toggle split variant="warning" id="dropdown-split-basic" />
+                          <Dropdown.Menu>
+                            <Dropdown.Item onClick={() => this.fetchData({ ...params, sort: 0 })}>A-Z</Dropdown.Item>
+                            <Dropdown.Item onClick={() => this.fetchData({ ...params, sort: 1 })}>Z-A</Dropdown.Item>
+                          </Dropdown.Menu>
+                        </Dropdown>
                       </div>
                     </h4>
                     <Row className='w-100 mb-5 card-deck'>
@@ -162,7 +168,7 @@ class Home extends Component {
             </div>
           )}
         </Row>
-        {this.state.isLoading && (<Loading/>)}
+        {this.state.isLoading && (<Loading />)}
       </>
     )
   }
