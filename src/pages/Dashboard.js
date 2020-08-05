@@ -36,6 +36,7 @@ class Home extends Component {
 
   constructor(props) {
     super(props)
+    console.log(props)
     this.checkToken = () => {
       if (!localStorage.getItem('token')) {
         alert('You must login first')

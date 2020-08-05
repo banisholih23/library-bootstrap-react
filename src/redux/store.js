@@ -5,7 +5,6 @@ import { persistStore } from 'redux-persist'
 
 import rootReducer from './reducer'
 
-
 export const store = createStore(
   rootReducer,
   applyMiddleware(
