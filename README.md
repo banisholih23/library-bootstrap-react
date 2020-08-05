@@ -1,5 +1,5 @@
 # BansLibrary
-<img width="150" src="./src/images/icon.png"/>
+<img width="150" src="./src/screenshot/banslibrary.png"/>
 <p ">
   Build with React.
 </p>
