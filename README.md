@@ -1,4 +1,4 @@
-# BansLibrary
+<h1 align="center">BansLibrary</h1>
 <div align="center">
   <img width="250" src="./src/screenshot/banslibrary.png"/>
   <p ">
