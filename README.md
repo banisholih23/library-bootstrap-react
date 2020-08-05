@@ -28,13 +28,10 @@ Bans Library is library web application that can borrow your favorite book, you 
 
 ## Screenshots
 <div align="center">
- <img width="500" src="./ss/home.png">
- <img width="500" src="./ss/detail1.png">
- <img width="500" src="./ss/detail2.png">
- <img width="500" src="./ss/editbook.png">
- <img width="500" src="./ss/manage.png">
- <img width="500" src="./ss/history.png">
- <img width="500" src="./ss/login.png">
+ <img width="500" src="./src/screenshot/portofolio1.png">
+ <img width="500" src="./src/screenshot/Portofolio2.png">
+ <img width="500" src="./src/screenshot/portofolio3.png">
+ <img width="500" src="./src/screenshot/PortoFolioTransactions.png">
 </div>
 
 ## Related Project (Backend)
