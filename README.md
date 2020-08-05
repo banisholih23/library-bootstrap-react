@@ -1,8 +1,10 @@
 # BansLibrary
-<img width="150" src="./src/screenshot/banslibrary.png"/>
-<p ">
-  Build with React.
-</p>
+<div align="center">
+  <img width="250" src="./src/screenshot/banslibrary.png"/>
+  <p ">
+    Build with React Native
+  </p>
+      </div>
 
 ## Introduction
 Bans Library is library web application that can borrow your favorite book, you can search your favorite book in search bar, you can see detail of book, and you can see history of book that you being borrowed
